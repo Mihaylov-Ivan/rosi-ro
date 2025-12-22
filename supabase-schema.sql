@@ -182,63 +182,27 @@ ON CONFLICT DO NOTHING;
 -- =====================================================
 -- 6. INSERT DEFAULT PORTFOLIO PROJECTS
 -- =====================================================
-INSERT INTO portfolio (title, category, image, description, location, year, scope)
-VALUES
-  (
-    'Жилищен комплекс',
-    'Жилищно строителство',
-    '/modern-apartment-building.png',
-    'Надзор на многофамилна жилищна сграда с 60 апартамента. Проектът включва пълен строителен надзор от започване до завършване, включително координация с всички специалисти и контрол на качеството.',
-    'гр. Хасково',
-    '2023',
-    'Строителен надзор, технически одит'
-  ),
-  (
-    'Търговски център',
-    'Търговско строителство',
-    '/commercial-building-modern.jpg',
-    'Пълен строителен надзор на търговски обект с площ 3000 кв.м. Включва координация на всички етапи от изкопни работи до финално завършване.',
-    'гр. Пловдив',
-    '2022',
-    'Строителен надзор, управление на проекта'
-  ),
-  (
-    'Индустриален обект',
-    'Индустриално строителство',
-    '/industrial-building-warehouse.jpg',
-    'Строителен надзор на производствен цех с офис площи. Специализиран надзор за индустриални съоръжения и технологични инсталации.',
-    'гр. Стара Загора',
-    '2023',
-    'Строителен надзор, технически контрол'
-  ),
-  (
-    'Соларна инсталация',
-    'Енергийни проекти',
-    '/solar-panels-installation.jpg',
-    'Технически надзор на фотоволтаична централа. Контрол на монтажа и съответствието със стандартите за електрически инсталации.',
-    'гр. Димитровград',
-    '2024',
-    'Технически надзор, енергиен одит'
-  ),
-  (
-    'Жилищна сграда',
-    'Жилищно строителство',
-    '/residential-building-yellow.jpg',
-    'Строителен надзор на жилищна сграда с 32 апартамента. Пълен контрол на изпълнението и качеството на строителните работи.',
-    'гр. Хасково',
-    '2023',
-    'Строителен надзор, качествен контрол'
-  ),
-  (
-    'Реконструкция на сграда',
-    'Реконструкция',
-    '/building-renovation-construction.jpg',
-    'Надзор при цялостна реконструкция на съществуваща сграда. Включва укрепване на конструкции и модернизация на инсталациите.',
-    'гр. Хасково',
-    '2022',
-    'Строителен надзор, консултации'
-  )
-ON CONFLICT DO NOTHING;
+-- NOTE: Default portfolio projects are NOT inserted here.
+-- All images must be uploaded to Supabase Storage first, then projects
+-- should be created via the admin panel which will use Supabase Storage URLs.
+--
+-- If you want to add default projects, first:
+-- 1. Upload images to Supabase Storage bucket 'portfolio-images'
+-- 2. Get the public URLs from Supabase Storage
+-- 3. Insert projects with those URLs, or create them via admin panel
+--
+-- Example structure (replace with actual Supabase Storage URLs):
+-- INSERT INTO portfolio (title, category, image, description, location, year, scope)
+-- VALUES
+--   (
+--     'Жилищен комплекс',
+--     'Жилищно строителство',
+--     'https://[project-ref].supabase.co/storage/v1/object/public/portfolio-images/portfolio/image.jpg',
+--     'Надзор на многофамилна жилищна сграда с 60 апартамента...',
+--     'гр. Хасково',
+--     '2023',
+--     'Строителен надзор, технически одит'
+--   );
 
 -- =====================================================
 -- 7. ROW LEVEL SECURITY (RLS) POLICIES

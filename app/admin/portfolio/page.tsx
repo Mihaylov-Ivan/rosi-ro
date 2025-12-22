@@ -274,11 +274,17 @@ export default function AdminPortfolio() {
               className="rounded-lg border border-border bg-card p-6 transition-shadow hover:shadow-lg"
             >
               <div className="mb-4 aspect-video overflow-hidden rounded-lg bg-muted">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="h-full w-full object-cover"
-                />
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground text-sm">
+                    No image
+                  </div>
+                )}
               </div>
               <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
               <h3 className="mb-2 text-xl font-semibold">{project.title}</h3>

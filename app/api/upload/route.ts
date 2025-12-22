@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
 import { isAdminAuthenticated } from "@/lib/auth";
+import { createSupabaseAdminClient } from "@/lib/supabase/client";
+import { NextRequest, NextResponse } from "next/server";
+
+const STORAGE_BUCKET = "portfolio-images"; // Change this to match your bucket name
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,23 +40,34 @@ export async function POST(request: NextRequest) {
     const randomString = Math.random().toString(36).substring(2, 15);
     const extension = file.name.split(".").pop();
     const filename = `${timestamp}-${randomString}.${extension}`;
+    const filePath = `portfolio/${filename}`; // Organize in a 'portfolio' folder within the bucket
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
+    // Upload to Supabase Storage
+    const supabase = createSupabaseAdminClient();
+    const fileBuffer = await file.arrayBuffer();
+    const fileBytes = new Uint8Array(fileBuffer);
+
+    const { data, error } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .upload(filePath, fileBytes, {
+        contentType: file.type,
+        upsert: false, // Don't overwrite existing files
+      });
+
+    if (error) {
+      console.error("Supabase storage upload error:", error);
+      return NextResponse.json(
+        { error: "Failed to upload file to storage" },
+        { status: 500 }
+      );
     }
 
-    // Save file
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const filepath = join(uploadsDir, filename);
-    await writeFile(filepath, buffer);
+    // Get public URL
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
 
-    // Return public URL
-    const url = `/uploads/${filename}`;
-
-    return NextResponse.json({ url });
+    return NextResponse.json({ url: publicUrl });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(

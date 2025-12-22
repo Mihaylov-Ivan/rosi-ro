@@ -81,12 +81,18 @@ export default function Portfolio() {
                   className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                    <Image
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform group-hover:scale-105"
-                    />
+                    {project.image ? (
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover transition-transform group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                        No image
+                      </div>
+                    )}
                   </div>
                   <div className="p-6">
                     <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
@@ -111,14 +117,16 @@ export default function Portfolio() {
                 <DialogTitle className="text-2xl font-bold">{selectedProject.title}</DialogTitle>
               </DialogHeader>
               <div className="space-y-6">
-                <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
-                  <Image
-                    src={selectedProject.image || "/placeholder.svg"}
-                    alt={selectedProject.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+                {selectedProject.image && (
+                  <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+                    <Image
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
 
                 <div>
                   <div className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
