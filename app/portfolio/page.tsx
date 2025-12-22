@@ -8,22 +8,28 @@ import type { PortfolioProject } from "@/lib/data/portfolio"
 
 export default function Portfolio() {
   const [projects, setProjects] = useState<PortfolioProject[]>([])
+  const [header, setHeader] = useState<{ title: string; description: string } | null>(null)
   const [loading, setLoading] = useState(true)
   const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
 
   useEffect(() => {
-    async function loadProjects() {
+    async function loadData() {
       try {
-        const response = await fetch("/api/portfolio")
-        const data = await response.json()
-        setProjects(data)
+        const [projectsResponse, headerResponse] = await Promise.all([
+          fetch("/api/portfolio"),
+          fetch("/api/portfolio-header"),
+        ])
+        const projectsData = await projectsResponse.json()
+        const headerData = await headerResponse.json()
+        setProjects(projectsData)
+        setHeader(headerData)
       } catch (error) {
-        console.error("Error loading projects:", error)
+        console.error("Error loading data:", error)
       } finally {
         setLoading(false)
       }
     }
-    loadProjects()
+    loadData()
   }, [])
 
   return (
@@ -52,15 +58,14 @@ export default function Portfolio() {
       </header>
 
       {/* Portfolio Header */}
-      <section className="bg-gradient-to-br from-muted to-background py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="mb-4 text-4xl font-bold text-balance">Нашето портфолио</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl">
-            Разгледайте реализираните от нас проекти в различни области на строителството - жилищни, търговски и
-            индустриални обекти.
-          </p>
-        </div>
-      </section>
+      {header && (
+        <section className="bg-gradient-to-br from-muted to-background py-16">
+          <div className="container mx-auto px-4">
+            <h1 className="mb-4 text-4xl font-bold text-balance">{header.title}</h1>
+            <p className="text-lg text-muted-foreground max-w-2xl">{header.description}</p>
+          </div>
+        </section>
+      )}
 
       {/* Portfolio Grid */}
       <section className="py-16">

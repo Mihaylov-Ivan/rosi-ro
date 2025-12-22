@@ -1,9 +1,39 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { useState, useEffect } from "react"
 import { Building2, FileCheck, ClipboardCheck, Mail, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import type { HomeContent } from "@/lib/data/home"
 
 export default function Home() {
+  const [content, setContent] = useState<HomeContent | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadContent() {
+      try {
+        const response = await fetch("/api/home")
+        const data = await response.json()
+        setContent(data)
+      } catch (error) {
+        console.error("Error loading home content:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadContent()
+  }, [])
+
+  if (loading || !content) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div>Зареждане...</div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -33,15 +63,14 @@ export default function Home() {
       <section className="bg-gradient-to-br from-muted to-background py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">Роси Ро ЕООД</h1>
-            <p className="mb-4 text-2xl text-muted-foreground text-balance">Консултант по строителен надзор</p>
+            <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
+            <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
             <p className="mb-8 text-lg text-muted-foreground leading-relaxed">
-              Професионални услуги за одит и издаване на разрешителни за строителни обекти. С дългогодишен опит и
-              експертност в областта на строителството.
+              {content.hero.description}
             </p>
             <Link href="/portfolio">
               <Button size="lg" className="text-base">
-                Вижте портфолио
+                {content.hero.buttonText}
               </Button>
             </Link>
           </div>
@@ -51,37 +80,24 @@ export default function Home() {
       {/* Services Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="mb-12 text-3xl font-bold text-center">Услуги</h2>
+          <h2 className="mb-12 text-3xl font-bold text-center">{content.services.title}</h2>
           <div className="grid gap-8 md:grid-cols-3">
-            <div className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                <Building2 className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-3 text-xl font-semibold">Строителен надзор</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Професионален надзор на строителни проекти за осигуряване на качество и спазване на нормативите.
-              </p>
-            </div>
-
-            <div className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                <FileCheck className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-3 text-xl font-semibold">Одити и проверки</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Задълбочени одити на строителни обекти и техническа документация.
-              </p>
-            </div>
-
-            <div className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                <ClipboardCheck className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-3 text-xl font-semibold">Разрешителни</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Съдействие при издаване на строителни разрешителни и необходима документация.
-              </p>
-            </div>
+            {content.services.items.map((service, index) => {
+              const icons = [Building2, FileCheck, ClipboardCheck]
+              const Icon = icons[index] || Building2
+              return (
+                <div
+                  key={service.id}
+                  className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg"
+                >
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="mb-3 text-xl font-semibold">{service.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -90,21 +106,16 @@ export default function Home() {
       <section className="bg-muted py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
-            <h2 className="mb-8 text-3xl font-bold">За нас</h2>
+            <h2 className="mb-8 text-3xl font-bold">{content.about.title}</h2>
             <div className="space-y-4 text-lg leading-relaxed">
-              <p>
-                Роси Ро ЕООД е водеща консултантска фирма в областта на строителния надзор с дългогодишен опит в сферата
-                на строителството. Специализирани сме в осъществяването на професионален строителен надзор, технически
-                одити и съдействие при издаване на строителни разрешителни.
-              </p>
-              <p>
-                Нашият опит включва разнообразни проекти - от жилищни сгради и търговски обекти до индустриални
-                съоръжения и инфраструктурни проекти. Гарантираме качество, прецизност и спазване на всички нормативни
-                изисквания.
-              </p>
-              <p className="font-medium">
-                Работим с отдаденост за осигуряване на най-високи стандарти в строителната индустрия.
-              </p>
+              {content.about.paragraphs.map((paragraph, index) => (
+                <p
+                  key={index}
+                  className={index === content.about.paragraphs.length - 1 ? "font-medium" : ""}
+                >
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
         </div>
@@ -114,7 +125,7 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
-            <h2 className="mb-8 text-3xl font-bold">Контакти</h2>
+            <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2>
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -122,7 +133,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="mb-1 font-semibold">Адрес</h3>
-                  <p className="text-muted-foreground">гр. Хасково, к-кс. XXI век, ет. 2, оф. 6</p>
+                  <p className="text-muted-foreground">{content.contact.address}</p>
                 </div>
               </div>
 
@@ -132,8 +143,11 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="mb-1 font-semibold">Телефон</h3>
-                  <a href="tel:+359898262834" className="text-muted-foreground hover:text-primary transition-colors">
-                    +359 898 262 834
+                  <a
+                    href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {content.contact.phone}
                   </a>
                 </div>
               </div>
@@ -145,10 +159,10 @@ export default function Home() {
                 <div>
                   <h3 className="mb-1 font-semibold">Имейл</h3>
                   <a
-                    href="mailto:rosenaminkova@gmail.com"
+                    href={`mailto:${content.contact.email}`}
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
-                    rosenaminkova@gmail.com
+                    {content.contact.email}
                   </a>
                 </div>
               </div>
@@ -161,8 +175,8 @@ export default function Home() {
       <footer className="border-t border-border bg-card py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="text-sm text-muted-foreground">© 2025 Роси Ро ЕООД. Всички права запазени.</p>
-            <p className="text-sm text-muted-foreground">Консултант по строителен надзор</p>
+            <p className="text-sm text-muted-foreground">{content.footer.copyright}</p>
+            <p className="text-sm text-muted-foreground">{content.footer.tagline}</p>
           </div>
         </div>
       </footer>

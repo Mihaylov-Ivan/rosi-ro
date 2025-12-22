@@ -7,12 +7,15 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ImageUpload } from "@/components/ui/image-upload"
-import { Plus, Trash2, Edit, LogOut } from "lucide-react"
+import { Plus, Trash2, Edit, LogOut, Save } from "lucide-react"
 import type { PortfolioProject } from "@/lib/data/portfolio"
+import type { PortfolioHeader } from "@/lib/data/portfolio-header"
 
 export default function AdminPortfolio() {
   const [projects, setProjects] = useState<PortfolioProject[]>([])
+  const [header, setHeader] = useState<PortfolioHeader | null>(null)
   const [loading, setLoading] = useState(true)
+  const [savingHeader, setSavingHeader] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<PortfolioProject | null>(null)
@@ -32,10 +35,11 @@ export default function AdminPortfolio() {
     checkAuth()
   }, [])
 
-  // Load projects
+  // Load projects and header
   useEffect(() => {
     if (isAuthenticated) {
       loadProjects()
+      loadHeader()
     }
   }, [isAuthenticated])
 
@@ -61,6 +65,40 @@ export default function AdminPortfolio() {
       console.error("Error loading projects:", error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadHeader = async () => {
+    try {
+      const response = await fetch("/api/portfolio-header")
+      const data = await response.json()
+      setHeader(data)
+    } catch (error) {
+      console.error("Error loading header:", error)
+    }
+  }
+
+  const handleSaveHeader = async () => {
+    if (!header) return
+
+    setSavingHeader(true)
+    try {
+      const response = await fetch("/api/portfolio-header", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(header),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save")
+      }
+
+      alert("Portfolio header saved successfully!")
+    } catch (error) {
+      console.error("Error saving header:", error)
+      alert("Failed to save header")
+    } finally {
+      setSavingHeader(false)
     }
   }
 
@@ -170,6 +208,9 @@ export default function AdminPortfolio() {
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <h1 className="text-xl font-bold">Admin - Portfolio Management</h1>
           <div className="flex gap-4">
+            <Button variant="outline" onClick={() => router.push("/admin/home")}>
+              Edit Home Page
+            </Button>
             <Button variant="outline" onClick={() => router.push("/portfolio")}>
               View Portfolio
             </Button>
@@ -183,6 +224,40 @@ export default function AdminPortfolio() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8">
+        {/* Portfolio Header Section */}
+        {header && (
+          <section className="mb-8 rounded-lg border border-border bg-card p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Portfolio Page Header</h2>
+              <Button onClick={handleSaveHeader} disabled={savingHeader} size="sm">
+                <Save className="mr-2 h-4 w-4" />
+                {savingHeader ? "Saving..." : "Save Header"}
+              </Button>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Title</Label>
+                <Input
+                  value={header.title}
+                  onChange={(e) =>
+                    setHeader({ ...header, title: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Description</Label>
+                <textarea
+                  value={header.description}
+                  onChange={(e) =>
+                    setHeader({ ...header, description: e.target.value })
+                  }
+                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+              </div>
+            </div>
+          </section>
+        )}
+
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold">Portfolio Projects</h2>
           <Button onClick={openAddDialog}>
