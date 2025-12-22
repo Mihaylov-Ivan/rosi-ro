@@ -25,3 +25,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# uploaded images (in production, use Supabase Storage)
+/public/uploads/*
+!/public/uploads/.gitkeep

@@ -2,92 +2,29 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-
-const projects = [
-  {
-    id: 1,
-    title: "Жилищен комплекс",
-    category: "Жилищно строителство",
-    image: "/modern-apartment-building.png",
-    description:
-      "Надзор на многофамилна жилищна сграда с 60 апартамента. Проектът включва пълен строителен надзор от започване до завършване, включително координация с всички специалисти и контрол на качеството.",
-    details: {
-      location: "гр. Хасково",
-      year: "2023",
-      scope: "Строителен надзор, технически одит",
-    },
-  },
-  {
-    id: 2,
-    title: "Търговски център",
-    category: "Търговско строителство",
-    image: "/commercial-building-modern.jpg",
-    description:
-      "Пълен строителен надзор на търговски обект с площ 3000 кв.м. Включва координация на всички етапи от изкопни работи до финално завършване.",
-    details: {
-      location: "гр. Пловдив",
-      year: "2022",
-      scope: "Строителен надзор, управление на проекта",
-    },
-  },
-  {
-    id: 3,
-    title: "Индустриален обект",
-    category: "Индустриално строителство",
-    image: "/industrial-building-warehouse.jpg",
-    description:
-      "Строителен надзор на производствен цех с офис площи. Специализиран надзор за индустриални съоръжения и технологични инсталации.",
-    details: {
-      location: "гр. Стара Загора",
-      year: "2023",
-      scope: "Строителен надзор, технически контрол",
-    },
-  },
-  {
-    id: 4,
-    title: "Соларна инсталация",
-    category: "Енергийни проекти",
-    image: "/solar-panels-installation.jpg",
-    description:
-      "Технически надзор на фотоволтаична централа. Контрол на монтажа и съответствието със стандартите за електрически инсталации.",
-    details: {
-      location: "гр. Димитровград",
-      year: "2024",
-      scope: "Технически надзор, енергиен одит",
-    },
-  },
-  {
-    id: 5,
-    title: "Жилищна сграда",
-    category: "Жилищно строителство",
-    image: "/residential-building-yellow.jpg",
-    description:
-      "Строителен надзор на жилищна сграда с 32 апартамента. Пълен контрол на изпълнението и качеството на строителните работи.",
-    details: {
-      location: "гр. Хасково",
-      year: "2023",
-      scope: "Строителен надзор, качествен контрол",
-    },
-  },
-  {
-    id: 6,
-    title: "Реконструкция на сграда",
-    category: "Реконструкция",
-    image: "/building-renovation-construction.jpg",
-    description:
-      "Надзор при цялостна реконструкция на съществуваща сграда. Включва укрепване на конструкции и модернизация на инсталациите.",
-    details: {
-      location: "гр. Хасково",
-      year: "2022",
-      scope: "Строителен надзор, консултации",
-    },
-  },
-]
+import type { PortfolioProject } from "@/lib/data/portfolio"
 
 export default function Portfolio() {
-  const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null)
+  const [projects, setProjects] = useState<PortfolioProject[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
+
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const response = await fetch("/api/portfolio")
+        const data = await response.json()
+        setProjects(data)
+      } catch (error) {
+        console.error("Error loading projects:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadProjects()
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -128,31 +65,35 @@ export default function Portfolio() {
       {/* Portfolio Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <button
-                key={project.id}
-                onClick={() => setSelectedProject(project)}
-                className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                  <Image
-                    src={project.image || "/placeholder.svg"}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
-                  <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
-                </div>
-              </button>
-            ))}
-          </div>
+          {loading ? (
+            <div className="py-12 text-center text-muted-foreground">Зареждане...</div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => (
+                <button
+                  key={project.id}
+                  onClick={() => setSelectedProject(project)}
+                  className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                    <Image
+                      src={project.image || "/placeholder.svg"}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
+                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
