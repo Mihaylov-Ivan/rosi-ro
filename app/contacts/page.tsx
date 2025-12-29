@@ -87,7 +87,7 @@ export default function Contacts() {
         <div className="container mx-auto flex items-center gap-8 px-4 py-4">
           <Link href="/" className="flex items-center gap-3">
             <Image
-              src="/images/logo.jpg"
+              src="/images/logo.png"
               alt="Роси Ро ЕООД Лого"
               width={120}
               height={40}
@@ -169,7 +169,7 @@ export default function Contacts() {
                     </div>
                   )}
                   {submitStatus === "error" && (
-                    <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-red-800">
+                    <div className="rounded-lg p-4 border" style={{ backgroundColor: 'rgba(100, 24, 42, 0.08)', borderColor: 'rgba(100, 24, 42, 0.25)', color: '#64182a' }}>
                       Възникна грешка при изпращането. Моля, опитайте отново по-късно.
                     </div>
                   )}

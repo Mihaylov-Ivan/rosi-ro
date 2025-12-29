@@ -249,7 +249,7 @@ export default function AdminPortfolio() {
         <div className="container mx-auto flex items-center gap-8 px-4 py-4">
           <div className="flex items-center gap-3 cursor-default">
             <Image
-              src="/images/logo.jpg"
+              src="/images/logo.png"
               alt="Роси Ро ЕООД Лого"
               width={120}
               height={40}
