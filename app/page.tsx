@@ -123,6 +123,20 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Certificate Section */}
+      <section className="bg-burgundy-dark py-8">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl text-left">
+            <a
+              href="/Удостоверение.pdf"
+              download
+              className="text-base font-semibold text-primary hover:text-primary/80 transition-colors underline"
+            >
+              Удостоверение
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="border-t border-border bg-card py-8">
