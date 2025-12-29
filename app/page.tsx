@@ -70,7 +70,7 @@ export default function Home() {
             <div>
               <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
               <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
-              <p className="mb-8 text-lg text-muted-foreground leading-relaxed">
+              <p className="mb-8 text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap text-justify">
                 {content.hero.description}
               </p>
               <Link href="/portfolio">
@@ -146,7 +146,7 @@ export default function Home() {
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="mb-3 text-xl font-semibold">{service.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+                  <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap text-justify">{service.description}</p>
                 </div>
               )
             })}
@@ -163,7 +163,7 @@ export default function Home() {
               {content.about.paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
-                  className={index === content.about.paragraphs.length - 1 ? "font-medium" : ""}
+                  className={`whitespace-pre-wrap text-justify ${index === content.about.paragraphs.length - 1 ? "font-medium" : ""}`}
                 >
                   {paragraph}
                 </p>

@@ -209,7 +209,7 @@ export default function AdminHome() {
             <textarea
               value={content.hero.description}
               onChange={(e) => updateHero("description", e.target.value)}
-              className="mb-8 w-full text-lg text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded resize-none"
+              className="mb-8 w-full text-lg text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded resize-none whitespace-pre-wrap"
               rows={3}
             />
             <Button
@@ -264,7 +264,7 @@ export default function AdminHome() {
                   <textarea
                     value={service.description}
                     onChange={(e) => updateService(index, "description", e.target.value)}
-                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none"
+                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap text-justify"
                     rows={4}
                   />
                 </div>
@@ -294,7 +294,7 @@ export default function AdminHome() {
                   key={index}
                   value={paragraph}
                   onChange={(e) => updateAbout(index, e.target.value)}
-                  className={`w-full border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded resize-none ${index === content.about.paragraphs.length - 1 ? "font-medium" : ""
+                  className={`w-full border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded resize-none whitespace-pre-wrap ${index === content.about.paragraphs.length - 1 ? "font-medium" : ""
                     }`}
                   rows={3}
                 />
