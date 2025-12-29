@@ -84,7 +84,7 @@ export default function Home() {
           <h2 className="mb-12 text-3xl font-bold text-center">{content.services.title}</h2>
           <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
             {content.services.items.map((service, index) => {
-              const icons = [FileCheck, FileCheck, FileCheck, FileCheck, FileCheck]
+              const icons = [FileCheck, FileCheck, FileCheck, FileCheck, FileCheck, FileCheck]
               const Icon = icons[index] || FileCheck
               const iconBgClass = "bg-salmon"
               return (

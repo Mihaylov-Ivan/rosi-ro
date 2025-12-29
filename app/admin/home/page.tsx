@@ -260,7 +260,7 @@ export default function AdminHome() {
           />
           <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
             {content.services.items.map((service, index) => {
-              const icons = [FileCheck, FileCheck, FileCheck, FileCheck, FileCheck]
+              const icons = [FileCheck, FileCheck, FileCheck, FileCheck, FileCheck, FileCheck]
               const Icon = icons[index] || FileCheck
               const iconBgClass = "bg-salmon"
               return (
