@@ -172,7 +172,7 @@ export default function AdminContacts() {
       </header>
 
       {/* Contact Section */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">

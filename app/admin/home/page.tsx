@@ -207,7 +207,7 @@ export default function AdminHome() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-muted to-background py-20">
+      <section className="bg-gradient-to-br from-muted to-background py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <Input
@@ -246,7 +246,7 @@ export default function AdminHome() {
       </section>
 
       {/* Services Section */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <Input
             value={content.services.title}
@@ -289,7 +289,7 @@ export default function AdminHome() {
       </section>
 
       {/* About Section */}
-      <section className="bg-muted py-20">
+      <section className="bg-muted py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <Input
@@ -319,7 +319,7 @@ export default function AdminHome() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <Input
