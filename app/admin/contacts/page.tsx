@@ -177,7 +177,7 @@ export default function AdminContacts() {
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">
               {/* Contact Info */}
-              <div>
+              <div className="bg-salmon p-8 rounded-lg">
                 <Input
                   value={content.contact.title}
                   onChange={(e) => updateContact("title", e.target.value)}

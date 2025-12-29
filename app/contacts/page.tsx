@@ -114,7 +114,7 @@ export default function Contacts() {
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">
               {/* Contact Info */}
-              <div>
+              <div className="bg-salmon p-8 rounded-lg">
                 <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
