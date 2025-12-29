@@ -2,21 +2,29 @@
 
 import { Button } from "@/components/ui/button"
 import type { HomeContent } from "@/lib/data/home"
-import { FileCheck } from "lucide-react"
+import type { PortfolioProject } from "@/lib/data/portfolio"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export default function Home() {
   const [content, setContent] = useState<HomeContent | null>(null)
+  const [projects, setProjects] = useState<PortfolioProject[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
 
   useEffect(() => {
     async function loadContent() {
       try {
-        const response = await fetch("/api/home")
-        const data = await response.json()
-        setContent(data)
+        const [homeResponse, portfolioResponse] = await Promise.all([
+          fetch("/api/home"),
+          fetch("/api/portfolio"),
+        ])
+        const homeData = await homeResponse.json()
+        const portfolioData = await portfolioResponse.json()
+        setContent(homeData)
+        setProjects(portfolioData)
       } catch (error) {
         console.error("Error loading home content:", error)
       } finally {
@@ -52,8 +60,8 @@ export default function Home() {
             <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
               Начало
             </Link>
-            <Link href="/portfolio" className="text-sm font-medium hover:text-primary transition-colors">
-              Портфолио
+            <Link href="/services" className="text-sm font-medium hover:text-primary transition-colors">
+              Услуги
             </Link>
             <Link href="/contacts" className="text-sm font-medium hover:text-primary transition-colors">
               Контакти
@@ -63,49 +71,64 @@ export default function Home() {
       </header>
 
       {/* Hero Section with Contact Info */}
-      <section className="bg-burgundy-light py-16">
+      <section className="bg-burgundy-light py-12">
         <div className="container mx-auto px-4">
           <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
           <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
           <p className="mb-8 text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
             {content.hero.description}
           </p>
-          <Link href="/portfolio">
+          <Link href="/services">
             <Button size="lg" className="text-base">
-              {content.hero.buttonText}
+              Услуги
             </Button>
           </Link>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Portfolio Section (replacing Services) */}
       <section className="bg-burgundy-dark py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-12 text-3xl font-bold text-center">{content.services.title}</h2>
-          <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
-            {content.services.items.map((service, index) => {
-              const icons = [FileCheck, FileCheck, FileCheck, FileCheck, FileCheck, FileCheck]
-              const Icon = icons[index] || FileCheck
-              const iconBgClass = "bg-salmon"
-              return (
-                <div
-                  key={service.id}
-                  className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg min-w-0"
+          {loading ? (
+            <div className="py-12 text-center text-muted-foreground">Зареждане...</div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => (
+                <button
+                  key={project.id}
+                  onClick={() => setSelectedProject(project)}
+                  className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left"
                 >
-                  <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${iconBgClass}`}>
-                    <Icon className="h-6 w-6 text-primary" />
+                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                    {project.image ? (
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover transition-transform group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                        No image
+                      </div>
+                    )}
                   </div>
-                  <h3 className="mb-3 text-lg font-semibold break-words">{service.title}</h3>
-                  <p className="text-base text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">{service.description}</p>
-                </div>
-              )
-            })}
-          </div>
+                  <div className="p-6">
+                    <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
+                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* About Section */}
-      <section className="bg-burgundy-light py-16">
+      <section className="bg-burgundy-light py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-8 text-3xl font-bold">{content.about.title}</h2>
@@ -137,6 +160,53 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Project Modal */}
+      <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          {selectedProject && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">{selectedProject.title}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6">
+                {selectedProject.image && (
+                  <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+                    <Image
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <div className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                    {selectedProject.category}
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed">{selectedProject.description}</p>
+                </div>
+
+                <div className="grid gap-4 border-t border-border pt-6 md:grid-cols-3">
+                  <div>
+                    <h4 className="mb-1 font-semibold">Локация</h4>
+                    <p className="text-muted-foreground">{selectedProject.details.location}</p>
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-semibold">Година</h4>
+                    <p className="text-muted-foreground">{selectedProject.details.year}</p>
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-semibold">Обхват</h4>
+                    <p className="text-muted-foreground">{selectedProject.details.scope}</p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Footer */}
       <footer className="border-t border-border bg-card py-8">

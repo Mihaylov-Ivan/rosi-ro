@@ -100,8 +100,8 @@ export default function Contacts() {
             <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
               Начало
             </Link>
-            <Link href="/portfolio" className="text-sm font-medium hover:text-primary transition-colors">
-              Портфолио
+            <Link href="/services" className="text-sm font-medium hover:text-primary transition-colors">
+              Услуги
             </Link>
             <Link href="/contacts" className="text-sm font-medium text-primary">
               Контакти
@@ -111,7 +111,7 @@ export default function Contacts() {
       </header>
 
       {/* Contact Section */}
-      <section className="bg-burgundy-light py-16">
+      <section className="bg-burgundy-light py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">

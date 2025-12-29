@@ -35,7 +35,7 @@ export default function AdminLogin() {
       }
 
       // Redirect to admin dashboard
-      router.push("/admin/portfolio")
+      router.push("/admin/home")
     } catch (err) {
       setError("Възникна грешка. Моля, опитайте отново.")
       setLoading(false)

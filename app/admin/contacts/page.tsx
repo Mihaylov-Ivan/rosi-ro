@@ -119,11 +119,11 @@ export default function AdminContacts() {
         </Button>
         <Button
           variant="outline"
-          onClick={() => router.push("/admin/portfolio")}
+          onClick={() => router.push("/admin/services")}
           size="sm"
           className="shadow-lg"
         >
-          Портфолио
+          Услуги
         </Button>
         <Button
           variant="outline"
@@ -159,7 +159,7 @@ export default function AdminContacts() {
               className="text-sm font-medium hover:text-primary transition-colors cursor-default"
               onClick={(e) => e.preventDefault()}
             >
-              Портфолио
+              Услуги
             </span>
             <span
               className="text-sm font-medium text-primary cursor-default"
@@ -172,7 +172,7 @@ export default function AdminContacts() {
       </header>
 
       {/* Contact Section */}
-      <section className="bg-burgundy-light py-16">
+      <section className="bg-burgundy-light py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">
