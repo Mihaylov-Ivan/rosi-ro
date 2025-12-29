@@ -1,18 +1,18 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import Image from "next/image"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { Building2, FileCheck, ClipboardCheck, Mail, Phone, Save, LogOut, Edit2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { LogOut, Save } from "lucide-react"
 import type { HomeContent } from "@/lib/data/home"
 
 export default function AdminHome() {
+  const [content, setContent] = useState<HomeContent | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [content, setContent] = useState<HomeContent | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -50,11 +50,6 @@ export default function AdminHome() {
     }
   }
 
-  const handleLogout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" })
-    router.push("/admin/login")
-  }
-
   const handleSave = async () => {
     if (!content) return
 
@@ -77,6 +72,11 @@ export default function AdminHome() {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleLogout = async () => {
+    await fetch("/api/admin/logout", { method: "POST" })
+    router.push("/admin/login")
   }
 
   const updateHero = (field: string, value: string) => {
@@ -126,211 +126,258 @@ export default function AdminHome() {
   if (loading || !isAuthenticated || !content) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div>Loading...</div>
+        <div>Зареждане...</div>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Admin Controls - Floating */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+        <Button
+          onClick={handleSave}
+          disabled={saving}
+          size="lg"
+          className="shadow-lg"
+        >
+          <Save className="mr-2 h-4 w-4" />
+          {saving ? "Запазване..." : "Запазване"}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => router.push("/admin/portfolio")}
+          size="sm"
+          className="shadow-lg"
+        >
+          Портфолио
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleLogout}
+          size="sm"
+          className="shadow-lg"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Изход
+        </Button>
+      </div>
+
       {/* Header */}
       <header className="border-b border-border bg-card">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="text-xl font-bold">Админ - Редактор на началната страница</h1>
-          <div className="flex gap-4">
-            <Button variant="outline" onClick={() => router.push("/admin/portfolio")}>
-              Редактиране на порфолиото
-            </Button>
-            <Button variant="outline" onClick={() => router.push("/")}>
-              Преглед на началната страница
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Изход
-            </Button>
+        <div className="container mx-auto flex items-center gap-8 px-4 py-4">
+          <div className="flex items-center gap-3 cursor-default">
+            <Image
+              src="/images/logo.jpg"
+              alt="Роси Ро ЕООД Лого"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+            />
           </div>
+          <nav className="flex gap-6">
+            <span
+              className="text-sm font-medium hover:text-primary transition-colors cursor-default"
+              onClick={(e) => e.preventDefault()}
+            >
+              Начало
+            </span>
+            <span
+              className="text-sm font-medium hover:text-primary transition-colors cursor-default"
+              onClick={(e) => e.preventDefault()}
+            >
+              Портфолио
+            </span>
+          </nav>
         </div>
       </header>
 
-      {/* Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Редактиране на съдържанието на началната страница</h2>
-          <Button onClick={handleSave} disabled={saving}>
-            <Save className="mr-2 h-4 w-4" />
-            {saving ? "Запазване..." : "Запазване на всички промени"}
-          </Button>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-muted to-background py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl">
+            <Input
+              value={content.hero.title}
+              onChange={(e) => updateHero("title", e.target.value)}
+              className="mb-6 text-5xl font-bold leading-tight border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded"
+            />
+            <Input
+              value={content.hero.subtitle}
+              onChange={(e) => updateHero("subtitle", e.target.value)}
+              className="mb-4 text-2xl text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded"
+            />
+            <textarea
+              value={content.hero.description}
+              onChange={(e) => updateHero("description", e.target.value)}
+              className="mb-8 w-full text-lg text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded resize-none"
+              rows={3}
+            />
+            <Button
+              size="lg"
+              className="text-base relative cursor-text"
+              onClick={(e) => e.preventDefault()}
+              asChild={false}
+            >
+              <span
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => updateHero("buttonText", e.currentTarget.textContent || "")}
+                className="outline-none focus:ring-2 focus:ring-primary-foreground rounded px-1"
+              >
+                {content.hero.buttonText}
+              </span>
+            </Button>
+          </div>
         </div>
+      </section>
 
-        <div className="space-y-8">
-          {/* Hero Section */}
-          <section className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Раздел "Херо"</h3>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Заглавие</Label>
-                <Input
-                  value={content.hero.title}
-                  onChange={(e) => updateHero("title", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Подзаглавие</Label>
-                <Input
-                  value={content.hero.subtitle}
-                  onChange={(e) => updateHero("subtitle", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Описание</Label>
-                <textarea
-                  value={content.hero.description}
-                  onChange={(e) => updateHero("description", e.target.value)}
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Текст на бутона</Label>
-                <Input
-                  value={content.hero.buttonText}
-                  onChange={(e) => updateHero("buttonText", e.target.value)}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Services Section */}
-          <section className="rounded-lg border border-border bg-card p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-semibold">Раздел "Услуги"</h3>
-            </div>
-            <div className="mb-4 space-y-2">
-              <Label>Заглавие на раздела</Label>
-              <Input
-                value={content.services.title}
-                onChange={(e) =>
-                  setContent({
-                    ...content,
-                    services: { ...content.services, title: e.target.value },
-                  })
-                }
-              />
-            </div>
-            <div className="space-y-6">
-              {content.services.items.map((service, index) => (
-                <div key={service.id} className="rounded-lg border border-border p-4">
-                  <h4 className="mb-4 font-medium">Услуга {index + 1}</h4>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Заглавие</Label>
-                      <Input
-                        value={service.title}
-                        onChange={(e) => updateService(index, "title", e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Описание</Label>
-                      <textarea
-                        value={service.description}
-                        onChange={(e) =>
-                          updateService(index, "description", e.target.value)
-                        }
-                        className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      />
-                    </div>
+      {/* Services Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <Input
+            value={content.services.title}
+            onChange={(e) =>
+              setContent({
+                ...content,
+                services: { ...content.services, title: e.target.value },
+              })
+            }
+            className="mb-12 text-3xl font-bold text-center border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+          />
+          <div className="grid gap-8 md:grid-cols-3">
+            {content.services.items.map((service, index) => {
+              const icons = [Building2, FileCheck, ClipboardCheck]
+              const Icon = icons[index] || Building2
+              return (
+                <div
+                  key={service.id}
+                  className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg"
+                >
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <Icon className="h-6 w-6 text-primary" />
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* About Section */}
-          <section className="rounded-lg border border-border bg-card p-6">
-            <div className="mb-4 space-y-2">
-              <Label>Заглавие на раздела</Label>
-              <Input
-                value={content.about.title}
-                onChange={(e) =>
-                  setContent({
-                    ...content,
-                    about: { ...content.about, title: e.target.value },
-                  })
-                }
-              />
-            </div>
-            <div className="space-y-4">
-              {content.about.paragraphs.map((paragraph, index) => (
-                <div key={index} className="space-y-2">
-                  <Label>Параграф {index + 1}</Label>
+                  <Input
+                    value={service.title}
+                    onChange={(e) => updateService(index, "title", e.target.value)}
+                    className="mb-3 text-xl font-semibold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+                  />
                   <textarea
-                    value={paragraph}
-                    onChange={(e) => updateAbout(index, e.target.value)}
-                    className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    value={service.description}
+                    onChange={(e) => updateService(index, "description", e.target.value)}
+                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none"
+                    rows={4}
                   />
                 </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="bg-muted py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl">
+            <Input
+              value={content.about.title}
+              onChange={(e) =>
+                setContent({
+                  ...content,
+                  about: { ...content.about, title: e.target.value },
+                })
+              }
+              className="mb-8 text-3xl font-bold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+            />
+            <div className="space-y-4 text-lg leading-relaxed">
+              {content.about.paragraphs.map((paragraph, index) => (
+                <textarea
+                  key={index}
+                  value={paragraph}
+                  onChange={(e) => updateAbout(index, e.target.value)}
+                  className={`w-full border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded resize-none ${index === content.about.paragraphs.length - 1 ? "font-medium" : ""
+                    }`}
+                  rows={3}
+                />
               ))}
             </div>
-          </section>
-
-          {/* Contact Section */}
-          <section className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Раздел "Контакт"</h3>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Заглавие на раздела</Label>
-                <Input
-                  value={content.contact.title}
-                  onChange={(e) => updateContact("title", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Адрес</Label>
-                <Input
-                  value={content.contact.address}
-                  onChange={(e) => updateContact("address", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Телефон</Label>
-                <Input
-                  value={content.contact.phone}
-                  onChange={(e) => updateContact("phone", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Имейл</Label>
-                <Input
-                  type="email"
-                  value={content.contact.email}
-                  onChange={(e) => updateContact("email", e.target.value)}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Footer Section */}
-          <section className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Раздел "Футър"</h3>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Copyright Text</Label>
-                <Input
-                  value={content.footer.copyright}
-                  onChange={(e) => updateFooter("copyright", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Слоган</Label>
-                <Input
-                  value={content.footer.tagline}
-                  onChange={(e) => updateFooter("tagline", e.target.value)}
-                />
-              </div>
-            </div>
-          </section>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl">
+            <Input
+              value={content.contact.title}
+              onChange={(e) => updateContact("title", e.target.value)}
+              className="mb-8 text-3xl font-bold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+            />
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <Building2 className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="mb-1 font-semibold">Адрес</h3>
+                  <Input
+                    value={content.contact.address}
+                    onChange={(e) => updateContact("address", e.target.value)}
+                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <Phone className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="mb-1 font-semibold">Телефон</h3>
+                  <Input
+                    value={content.contact.phone}
+                    onChange={(e) => updateContact("phone", e.target.value)}
+                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <Mail className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="mb-1 font-semibold">Имейл</h3>
+                  <Input
+                    type="email"
+                    value={content.contact.email}
+                    onChange={(e) => updateContact("email", e.target.value)}
+                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <Input
+              value={content.footer.copyright}
+              onChange={(e) => updateFooter("copyright", e.target.value)}
+              className="text-sm text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full md:w-auto"
+            />
+            <Input
+              value={content.footer.tagline}
+              onChange={(e) => updateFooter("tagline", e.target.value)}
+              className="text-sm text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full md:w-auto"
+            />
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
-

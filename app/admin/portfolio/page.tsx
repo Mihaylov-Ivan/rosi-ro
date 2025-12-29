@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import Image from "next/image"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { ImageUpload } from "@/components/ui/image-upload"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ImageUpload } from "@/components/ui/image-upload"
 import { Plus, Trash2, Edit, LogOut, Save } from "lucide-react"
 import type { PortfolioProject } from "@/lib/data/portfolio"
 import type { PortfolioHeader } from "@/lib/data/portfolio-header"
@@ -19,6 +20,7 @@ export default function AdminPortfolio() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<PortfolioProject | null>(null)
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -30,12 +32,10 @@ export default function AdminPortfolio() {
   })
   const router = useRouter()
 
-  // Check authentication
   useEffect(() => {
     checkAuth()
   }, [])
 
-  // Load projects and header
   useEffect(() => {
     if (isAuthenticated) {
       loadProjects()
@@ -138,7 +138,6 @@ export default function AdminPortfolio() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validate that image is provided
     if (!formData.image) {
       alert("Please upload an image")
       return
@@ -158,14 +157,12 @@ export default function AdminPortfolio() {
 
     try {
       if (editingProject) {
-        // Update
         await fetch("/api/portfolio", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: editingProject.id, ...projectData }),
         })
       } else {
-        // Create
         await fetch("/api/portfolio", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -196,123 +193,207 @@ export default function AdminPortfolio() {
   if (loading || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div>Loading...</div>
+        <div>Зареждане...</div>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Admin Controls - Floating */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+        {header && (
+          <Button
+            onClick={handleSaveHeader}
+            disabled={savingHeader}
+            size="lg"
+            className="shadow-lg"
+          >
+            <Save className="mr-2 h-4 w-4" />
+            {savingHeader ? "Запазване..." : "Запазване на заглавието"}
+          </Button>
+        )}
+        <Button onClick={openAddDialog} size="lg" className="shadow-lg">
+          <Plus className="mr-2 h-4 w-4" />
+          Добавяне на проект
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => router.push("/admin/home")}
+          size="sm"
+          className="shadow-lg"
+        >
+          Начало
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleLogout}
+          size="sm"
+          className="shadow-lg"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Изход
+        </Button>
+      </div>
+
       {/* Header */}
       <header className="border-b border-border bg-card">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="text-xl font-bold">Админ - Редактор на порфолиото</h1>
-          <div className="flex gap-4">
-            <Button variant="outline" onClick={() => router.push("/admin/home")}>
-              Редактиране на началната страница
-            </Button>
-            <Button variant="outline" onClick={() => router.push("/portfolio")}>
-              Преглед на порфолиото
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Изход
-            </Button>
+        <div className="container mx-auto flex items-center gap-8 px-4 py-4">
+          <div className="flex items-center gap-3 cursor-default">
+            <Image
+              src="/images/logo.jpg"
+              alt="Роси Ро ЕООД Лого"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+            />
           </div>
+          <nav className="flex gap-6">
+            <span
+              className="text-sm font-medium hover:text-primary transition-colors cursor-default"
+              onClick={(e) => e.preventDefault()}
+            >
+              Начало
+            </span>
+            <span
+              className="text-sm font-medium text-primary cursor-default"
+              onClick={(e) => e.preventDefault()}
+            >
+              Портфолио
+            </span>
+          </nav>
         </div>
       </header>
 
-      {/* Content */}
-      <div className="container mx-auto px-4 py-8">
-        {/* Portfolio Header Section */}
-        {header && (
-          <section className="mb-8 rounded-lg border border-border bg-card p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Заглавие на страницата за порфолио</h2>
-              <Button onClick={handleSaveHeader} disabled={savingHeader} size="sm">
-                <Save className="mr-2 h-4 w-4" />
-                {savingHeader ? "Запазване..." : "Запазване"}
-              </Button>
-            </div>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Заглавие</Label>
-                <Input
-                  value={header.title}
-                  onChange={(e) =>
-                    setHeader({ ...header, title: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Описание</Label>
-                <textarea
-                  value={header.description}
-                  onChange={(e) =>
-                    setHeader({ ...header, description: e.target.value })
-                  }
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                />
-              </div>
-            </div>
-          </section>
-        )}
+      {/* Portfolio Header */}
+      {header && (
+        <section className="bg-gradient-to-br from-muted to-background py-16">
+          <div className="container mx-auto px-4">
+            <Input
+              value={header.title}
+              onChange={(e) => setHeader({ ...header, title: e.target.value })}
+              className="mb-4 text-4xl font-bold text-balance border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+            />
+            <textarea
+              value={header.description}
+              onChange={(e) => setHeader({ ...header, description: e.target.value })}
+              className="text-lg text-muted-foreground max-w-2xl border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none"
+              rows={3}
+            />
+          </div>
+        </section>
+      )}
 
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Проекти за порфолио</h2>
-          <Button onClick={openAddDialog}>
-            <Plus className="mr-2 h-4 w-4" />
-            Добавяне на проект
-          </Button>
+      {/* Portfolio Grid */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          {loading ? (
+            <div className="py-12 text-center text-muted-foreground">Зареждане...</div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => (
+                <div
+                  key={project.id}
+                  className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] relative"
+                >
+                  {/* Edit/Delete buttons overlay */}
+                  <div className="absolute top-2 right-2 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => openEditDialog(project)}
+                      className="h-8 w-8 p-0"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(project.id)}
+                      className="h-8 w-8 p-0"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <button
+                    onClick={() => setSelectedProject(project)}
+                    className="w-full text-left"
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                      {project.image ? (
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-6">
+                      <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
+                      <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                    </div>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+      </section>
 
-        {/* Projects List */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="rounded-lg border border-border bg-card p-6 transition-shadow hover:shadow-lg"
-            >
-              <div className="mb-4 aspect-video overflow-hidden rounded-lg bg-muted">
-                {project.image ? (
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground text-sm">
-                    Няма изображение
+      {/* Project Modal */}
+      <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          {selectedProject && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">{selectedProject.title}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6">
+                {selectedProject.image && (
+                  <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+                    <Image
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 )}
-              </div>
-              <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
-              <h3 className="mb-2 text-xl font-semibold">{project.title}</h3>
-              <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">{project.description}</p>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => openEditDialog(project)}>
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDelete(project.id)}
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {projects.length === 0 && (
-          <div className="py-12 text-center text-muted-foreground">
-            Няма проекти. Кликнете върху "Добавяне на проект", за да започнете.
-          </div>
-        )}
-      </div>
+                <div>
+                  <div className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                    {selectedProject.category}
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed">{selectedProject.description}</p>
+                </div>
+
+                <div className="grid gap-4 border-t border-border pt-6 md:grid-cols-3">
+                  <div>
+                    <h4 className="mb-1 font-semibold">Локация</h4>
+                    <p className="text-muted-foreground">{selectedProject.details.location}</p>
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-semibold">Година</h4>
+                    <p className="text-muted-foreground">{selectedProject.details.year}</p>
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-semibold">Обхват</h4>
+                    <p className="text-muted-foreground">{selectedProject.details.scope}</p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Add/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -401,7 +482,16 @@ export default function AdminPortfolio() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <p className="text-sm text-muted-foreground">© 2025 Роси Ро ЕООД. Всички права запазени.</p>
+            <p className="text-sm text-muted-foreground">Консултант по строителен надзор</p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
-
