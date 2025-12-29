@@ -206,17 +206,17 @@ export default function AdminPortfolio() {
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="text-xl font-bold">Admin - Portfolio Management</h1>
+          <h1 className="text-xl font-bold">Админ - Портфолио</h1>
           <div className="flex gap-4">
             <Button variant="outline" onClick={() => router.push("/admin/home")}>
-              Edit Home Page
+              Редактиране на началната страница
             </Button>
             <Button variant="outline" onClick={() => router.push("/portfolio")}>
-              View Portfolio
+              Преглед на порфолиото
             </Button>
             <Button variant="outline" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              Изход
             </Button>
           </div>
         </div>
@@ -228,15 +228,15 @@ export default function AdminPortfolio() {
         {header && (
           <section className="mb-8 rounded-lg border border-border bg-card p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Portfolio Page Header</h2>
+              <h2 className="text-xl font-semibold">Заглавие на страницата за порфолио</h2>
               <Button onClick={handleSaveHeader} disabled={savingHeader} size="sm">
                 <Save className="mr-2 h-4 w-4" />
-                {savingHeader ? "Saving..." : "Save Header"}
+                {savingHeader ? "Запазване..." : "Запазване"}
               </Button>
             </div>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Title</Label>
+                <Label>Заглавие</Label>
                 <Input
                   value={header.title}
                   onChange={(e) =>
@@ -245,7 +245,7 @@ export default function AdminPortfolio() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
+                <Label>Описание</Label>
                 <textarea
                   value={header.description}
                   onChange={(e) =>
@@ -259,10 +259,10 @@ export default function AdminPortfolio() {
         )}
 
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Portfolio Projects</h2>
+          <h2 className="text-2xl font-bold">Проекти за порфолио</h2>
           <Button onClick={openAddDialog}>
             <Plus className="mr-2 h-4 w-4" />
-            Add Project
+            Добавяне на проект
           </Button>
         </div>
 
@@ -282,7 +282,7 @@ export default function AdminPortfolio() {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground text-sm">
-                    No image
+                    Няма изображение
                   </div>
                 )}
               </div>
@@ -309,7 +309,7 @@ export default function AdminPortfolio() {
 
         {projects.length === 0 && (
           <div className="py-12 text-center text-muted-foreground">
-            No projects yet. Click "Add Project" to get started.
+            Няма проекти. Кликнете върху "Добавяне на проект", за да започнете.
           </div>
         )}
       </div>
@@ -318,11 +318,11 @@ export default function AdminPortfolio() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingProject ? "Edit Project" : "Add New Project"}</DialogTitle>
+            <DialogTitle>{editingProject ? "Редактиране на проект" : "Добавяне на нов проект"}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title *</Label>
+              <Label htmlFor="title">Заглавие *</Label>
               <Input
                 id="title"
                 value={formData.title}
@@ -332,7 +332,7 @@ export default function AdminPortfolio() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
+              <Label htmlFor="category">Категория *</Label>
               <Input
                 id="category"
                 value={formData.category}
@@ -342,7 +342,7 @@ export default function AdminPortfolio() {
             </div>
 
             <div className="space-y-2">
-              <Label>Image *</Label>
+              <Label>Изображение *</Label>
               <ImageUpload
                 value={formData.image}
                 onChange={(url) => setFormData({ ...formData, image: url })}
@@ -350,7 +350,7 @@ export default function AdminPortfolio() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description *</Label>
+              <Label htmlFor="description">Описание *</Label>
               <textarea
                 id="description"
                 value={formData.description}
@@ -362,7 +362,7 @@ export default function AdminPortfolio() {
 
             <div className="grid gap-4 md:grid-cols-3">
               <div className="space-y-2">
-                <Label htmlFor="location">Location *</Label>
+                <Label htmlFor="location">Локация *</Label>
                 <Input
                   id="location"
                   value={formData.location}
@@ -372,7 +372,7 @@ export default function AdminPortfolio() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="year">Year *</Label>
+                <Label htmlFor="year">Година *</Label>
                 <Input
                   id="year"
                   value={formData.year}
@@ -382,7 +382,7 @@ export default function AdminPortfolio() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="scope">Scope *</Label>
+                <Label htmlFor="scope">Обхват *</Label>
                 <Input
                   id="scope"
                   value={formData.scope}
@@ -394,9 +394,9 @@ export default function AdminPortfolio() {
 
             <div className="flex justify-end gap-2 pt-4">
               <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
+                Отказ
               </Button>
-              <Button type="submit">{editingProject ? "Update" : "Create"}</Button>
+              <Button type="submit">{editingProject ? "Обновяване" : "Създаване"}</Button>
             </div>
           </form>
         </DialogContent>

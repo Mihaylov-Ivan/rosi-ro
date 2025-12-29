@@ -136,17 +136,17 @@ export default function AdminHome() {
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="text-xl font-bold">Admin - Home Page Editor</h1>
+          <h1 className="text-xl font-bold">Админ - Редактор на началната страница</h1>
           <div className="flex gap-4">
             <Button variant="outline" onClick={() => router.push("/admin/portfolio")}>
-              Edit Portfolio
+              Редактиране на порфолиото
             </Button>
             <Button variant="outline" onClick={() => router.push("/")}>
-              View Home
+              Преглед на началната страница
             </Button>
             <Button variant="outline" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              Изход
             </Button>
           </div>
         </div>
@@ -155,34 +155,34 @@ export default function AdminHome() {
       {/* Content */}
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Edit Home Page Content</h2>
+          <h2 className="text-2xl font-bold">Редактиране на съдържанието на началната страница</h2>
           <Button onClick={handleSave} disabled={saving}>
             <Save className="mr-2 h-4 w-4" />
-            {saving ? "Saving..." : "Save All Changes"}
+            {saving ? "Запазване..." : "Запазване на всички промени"}
           </Button>
         </div>
 
         <div className="space-y-8">
           {/* Hero Section */}
           <section className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Hero Section</h3>
+            <h3 className="mb-4 text-xl font-semibold">Раздел "Херо"</h3>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Title</Label>
+                <Label>Заглавие</Label>
                 <Input
                   value={content.hero.title}
                   onChange={(e) => updateHero("title", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Subtitle</Label>
+                <Label>Подзаглавие</Label>
                 <Input
                   value={content.hero.subtitle}
                   onChange={(e) => updateHero("subtitle", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
+                <Label>Описание</Label>
                 <textarea
                   value={content.hero.description}
                   onChange={(e) => updateHero("description", e.target.value)}
@@ -190,7 +190,7 @@ export default function AdminHome() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Button Text</Label>
+                <Label>Текст на бутона</Label>
                 <Input
                   value={content.hero.buttonText}
                   onChange={(e) => updateHero("buttonText", e.target.value)}
@@ -202,10 +202,10 @@ export default function AdminHome() {
           {/* Services Section */}
           <section className="rounded-lg border border-border bg-card p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-semibold">Services Section</h3>
+              <h3 className="text-xl font-semibold">Раздел "Услуги"</h3>
             </div>
             <div className="mb-4 space-y-2">
-              <Label>Section Title</Label>
+              <Label>Заглавие на раздела</Label>
               <Input
                 value={content.services.title}
                 onChange={(e) =>
@@ -219,17 +219,17 @@ export default function AdminHome() {
             <div className="space-y-6">
               {content.services.items.map((service, index) => (
                 <div key={service.id} className="rounded-lg border border-border p-4">
-                  <h4 className="mb-4 font-medium">Service {index + 1}</h4>
+                  <h4 className="mb-4 font-medium">Услуга {index + 1}</h4>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label>Title</Label>
+                      <Label>Заглавие</Label>
                       <Input
                         value={service.title}
                         onChange={(e) => updateService(index, "title", e.target.value)}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Description</Label>
+                      <Label>Описание</Label>
                       <textarea
                         value={service.description}
                         onChange={(e) =>
@@ -247,7 +247,7 @@ export default function AdminHome() {
           {/* About Section */}
           <section className="rounded-lg border border-border bg-card p-6">
             <div className="mb-4 space-y-2">
-              <Label>Section Title</Label>
+              <Label>Заглавие на раздела</Label>
               <Input
                 value={content.about.title}
                 onChange={(e) =>
@@ -261,7 +261,7 @@ export default function AdminHome() {
             <div className="space-y-4">
               {content.about.paragraphs.map((paragraph, index) => (
                 <div key={index} className="space-y-2">
-                  <Label>Paragraph {index + 1}</Label>
+                  <Label>Параграф {index + 1}</Label>
                   <textarea
                     value={paragraph}
                     onChange={(e) => updateAbout(index, e.target.value)}
@@ -274,31 +274,31 @@ export default function AdminHome() {
 
           {/* Contact Section */}
           <section className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Contact Section</h3>
+            <h3 className="mb-4 text-xl font-semibold">Раздел "Контакт"</h3>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Section Title</Label>
+                <Label>Заглавие на раздела</Label>
                 <Input
                   value={content.contact.title}
                   onChange={(e) => updateContact("title", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Address</Label>
+                <Label>Адрес</Label>
                 <Input
                   value={content.contact.address}
                   onChange={(e) => updateContact("address", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Phone</Label>
+                <Label>Телефон</Label>
                 <Input
                   value={content.contact.phone}
                   onChange={(e) => updateContact("phone", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Email</Label>
+                <Label>Имейл</Label>
                 <Input
                   type="email"
                   value={content.contact.email}
@@ -310,7 +310,7 @@ export default function AdminHome() {
 
           {/* Footer Section */}
           <section className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Footer</h3>
+            <h3 className="mb-4 text-xl font-semibold">Раздел "Футър"</h3>
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label>Copyright Text</Label>
@@ -320,7 +320,7 @@ export default function AdminHome() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Tagline</Label>
+                <Label>Слоган</Label>
                 <Input
                   value={content.footer.tagline}
                   onChange={(e) => updateFooter("tagline", e.target.value)}

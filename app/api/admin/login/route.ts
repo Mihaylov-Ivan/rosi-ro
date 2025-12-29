@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     if (!password) {
       return NextResponse.json(
-        { error: "Password is required" },
+        { error: "Паролата е задължителна" },
         { status: 400 }
       );
     }
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const isValid = await verifyAdminPassword(password);
 
     if (!isValid) {
-      return NextResponse.json({ error: "Invalid password" }, { status: 401 });
+      return NextResponse.json({ error: "Невалидна парола" }, { status: 401 });
     }
 
     const sessionToken = await createAdminSession();
@@ -27,9 +27,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Грешка при вход:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Вътрешна сървърна грешка" },
       { status: 500 }
     );
   }

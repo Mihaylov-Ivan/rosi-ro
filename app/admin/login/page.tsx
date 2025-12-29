@@ -29,7 +29,7 @@ export default function AdminLogin() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || "Invalid password")
+        setError(data.error || "Невалидна парола")
         setLoading(false)
         return
       }
@@ -37,7 +37,7 @@ export default function AdminLogin() {
       // Redirect to admin dashboard
       router.push("/admin/portfolio")
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError("Възникна грешка. Моля, опитайте отново.")
       setLoading(false)
     }
   }
@@ -46,19 +46,19 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-md space-y-8 p-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Admin Login</h1>
-          <p className="text-muted-foreground mt-2">Enter password to access admin panel</p>
+          <h1 className="text-3xl font-bold">Админ - Вход</h1>
+          <p className="text-muted-foreground mt-2">Въведете парола за достъп до админ панела</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Парола</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter admin password"
+              placeholder="Въведете паролата за админ панела"
               required
               autoFocus
             />
@@ -71,7 +71,7 @@ export default function AdminLogin() {
           )}
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Влизане..." : "Вход"}
           </Button>
         </form>
       </div>
