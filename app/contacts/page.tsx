@@ -1,18 +1,21 @@
 "use client"
 
-import Image from "next/image"
-import Link from "next/link"
-import { useState, useEffect } from "react"
-import { Building2, Mail, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import sendEmail from "@/lib/actions/email"
 import type { HomeContent } from "@/lib/data/home"
+import { Building2, Mail, Phone } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export default function Contacts() {
   const [content, setContent] = useState<HomeContent | null>(null)
   const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,10 +37,32 @@ export default function Contacts() {
     loadContent()
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Form submission functionality will be added later
-    console.log("Form submitted:", formData)
+    setSubmitting(true)
+    setSubmitStatus(null)
+
+    try {
+      const text = `Име: ${formData.name}\nИмейл: ${formData.email}\n\nСъобщение:\n${formData.message}`
+
+      await sendEmail({
+        fromName: formData.name,
+        fromEmail: formData.email,
+        text
+      })
+
+      setSubmitStatus("success")
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      })
+    } catch (error) {
+      console.error("Error sending email:", error)
+      setSubmitStatus("error")
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -98,7 +123,7 @@ export default function Contacts() {
                     </div>
                     <div>
                       <h3 className="mb-1 font-semibold">Адрес</h3>
-                      <p className="text-muted-foreground">{content.contact.address}</p>
+                      <p className="text-muted-foreground whitespace-pre-wrap">{content.contact.address}</p>
                     </div>
                   </div>
 
@@ -138,6 +163,17 @@ export default function Contacts() {
               <div>
                 <h2 className="mb-8 text-3xl font-bold">Изпратете запитване</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {submitStatus === "success" && (
+                    <div className="rounded-lg bg-green-50 border border-green-200 p-4 text-green-800">
+                      Съобщението е изпратено успешно! Ще се свържем с вас скоро.
+                    </div>
+                  )}
+                  {submitStatus === "error" && (
+                    <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-red-800">
+                      Възникна грешка при изпращането. Моля, опитайте отново по-късно.
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     <Label htmlFor="name">Име</Label>
                     <Input
@@ -148,6 +184,7 @@ export default function Contacts() {
                       onChange={handleChange}
                       required
                       placeholder="Вашето име"
+                      disabled={submitting}
                     />
                   </div>
 
@@ -161,6 +198,7 @@ export default function Contacts() {
                       onChange={handleChange}
                       required
                       placeholder="ваш@имейл.com"
+                      disabled={submitting}
                     />
                   </div>
 
@@ -174,11 +212,12 @@ export default function Contacts() {
                       required
                       placeholder="Вашето съобщение..."
                       rows={6}
+                      disabled={submitting}
                     />
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full">
-                    Изпрати
+                  <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+                    {submitting ? "Изпращане..." : "Изпрати"}
                   </Button>
                 </form>
               </div>

@@ -227,6 +227,14 @@ export default function AdminPortfolio() {
         </Button>
         <Button
           variant="outline"
+          onClick={() => router.push("/admin/contacts")}
+          size="sm"
+          className="shadow-lg"
+        >
+          Контакти
+        </Button>
+        <Button
+          variant="outline"
           onClick={handleLogout}
           size="sm"
           className="shadow-lg"
@@ -260,6 +268,12 @@ export default function AdminPortfolio() {
               onClick={(e) => e.preventDefault()}
             >
               Портфолио
+            </span>
+            <span
+              className="text-sm font-medium hover:text-primary transition-colors cursor-default"
+              onClick={(e) => e.preventDefault()}
+            >
+              Контакти
             </span>
           </nav>
         </div>

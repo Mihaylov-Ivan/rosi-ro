@@ -154,6 +154,14 @@ export default function AdminHome() {
         </Button>
         <Button
           variant="outline"
+          onClick={() => router.push("/admin/contacts")}
+          size="sm"
+          className="shadow-lg"
+        >
+          Контакти
+        </Button>
+        <Button
+          variant="outline"
           onClick={handleLogout}
           size="sm"
           className="shadow-lg"
@@ -187,6 +195,12 @@ export default function AdminHome() {
               onClick={(e) => e.preventDefault()}
             >
               Портфолио
+            </span>
+            <span
+              className="text-sm font-medium text-primary cursor-default"
+              onClick={(e) => e.preventDefault()}
+            >
+              Контакти
             </span>
           </nav>
         </div>
@@ -264,7 +278,7 @@ export default function AdminHome() {
                   <textarea
                     value={service.description}
                     onChange={(e) => updateService(index, "description", e.target.value)}
-                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap text-justify"
+                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap"
                     rows={4}
                   />
                 </div>
