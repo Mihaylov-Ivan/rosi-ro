@@ -53,6 +53,9 @@ export default function Portfolio() {
             <Link href="/portfolio" className="text-sm font-medium text-primary">
               Портфолио
             </Link>
+            <Link href="/contacts" className="text-sm font-medium hover:text-primary transition-colors">
+              Контакти
+            </Link>
           </nav>
         </div>
       </header>
@@ -160,7 +163,7 @@ export default function Portfolio() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-muted-foreground">© 2025 Роси Ро ЕООД. Всички права запазени.</p>
-            <p className="text-sm text-muted-foreground">Консултант по строителен надзор</p>
+            <p className="text-sm text-muted-foreground">Консултант строителен надзор</p>
           </div>
         </div>
       </footer>

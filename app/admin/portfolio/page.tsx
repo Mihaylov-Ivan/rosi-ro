@@ -488,7 +488,7 @@ export default function AdminPortfolio() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-muted-foreground">© 2025 Роси Ро ЕООД. Всички права запазени.</p>
-            <p className="text-sm text-muted-foreground">Консултант по строителен надзор</p>
+            <p className="text-sm text-muted-foreground">Консултант строителен надзор</p>
           </div>
         </div>
       </footer>

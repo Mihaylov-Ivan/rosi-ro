@@ -55,24 +55,76 @@ export default function Home() {
             <Link href="/portfolio" className="text-sm font-medium hover:text-primary transition-colors">
               Портфолио
             </Link>
+            <Link href="/contacts" className="text-sm font-medium hover:text-primary transition-colors">
+              Контакти
+            </Link>
           </nav>
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section with Contact Info */}
       <section className="bg-gradient-to-br from-muted to-background py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
-            <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
-            <p className="mb-8 text-lg text-muted-foreground leading-relaxed">
-              {content.hero.description}
-            </p>
-            <Link href="/portfolio">
-              <Button size="lg" className="text-base">
-                {content.hero.buttonText}
-              </Button>
-            </Link>
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            {/* Hero Content */}
+            <div>
+              <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
+              <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
+              <p className="mb-8 text-lg text-muted-foreground leading-relaxed">
+                {content.hero.description}
+              </p>
+              <Link href="/portfolio">
+                <Button size="lg" className="text-base">
+                  {content.hero.buttonText}
+                </Button>
+              </Link>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              {/* <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2> */}
+              <div className="space-y-6 h-full flex flex-col justify-center">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <Building2 className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="mb-1 font-semibold">Адрес</h3>
+                    <p className="text-muted-foreground">{content.contact.address}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <Phone className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="mb-1 font-semibold">Телефон</h3>
+                    <a
+                      href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {content.contact.phone}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <Mail className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="mb-1 font-semibold">Имейл</h3>
+                    <a
+                      href={`mailto:${content.contact.email}`}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {content.contact.email}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -121,55 +173,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl">
-            <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2>
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Building2 className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="mb-1 font-semibold">Адрес</h3>
-                  <p className="text-muted-foreground">{content.contact.address}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Phone className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="mb-1 font-semibold">Телефон</h3>
-                  <a
-                    href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {content.contact.phone}
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Mail className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="mb-1 font-semibold">Имейл</h3>
-                  <a
-                    href={`mailto:${content.contact.email}`}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {content.contact.email}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="border-t border-border bg-card py-8">

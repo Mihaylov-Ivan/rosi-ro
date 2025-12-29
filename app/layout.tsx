@@ -8,7 +8,7 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Роси Ро ЕООД - Консултант по строителен надзор",
+  title: "Роси Ро ЕООД - Консултант строителен надзор",
   description:
     "Професионални услуги за строителен надзор, одити и издаване на разрешителни за строителни обекти в гр. Хасково",
   generator: "v0.app",
