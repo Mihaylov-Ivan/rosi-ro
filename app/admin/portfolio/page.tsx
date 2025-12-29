@@ -206,7 +206,7 @@ export default function AdminPortfolio() {
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="text-xl font-bold">Админ - Портфолио</h1>
+          <h1 className="text-xl font-bold">Админ - Редактор на порфолиото</h1>
           <div className="flex gap-4">
             <Button variant="outline" onClick={() => router.push("/admin/home")}>
               Редактиране на началната страница
