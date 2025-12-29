@@ -95,8 +95,8 @@ export default function Home() {
                   <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${iconBgClass}`}>
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="mb-3 text-xl font-semibold break-words">{service.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">{service.description}</p>
+                  <h3 className="mb-3 text-lg font-semibold break-words">{service.title}</h3>
+                  <p className="text-base text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">{service.description}</p>
                 </div>
               )
             })}

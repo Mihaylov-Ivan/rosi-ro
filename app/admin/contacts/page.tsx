@@ -247,6 +247,12 @@ export default function AdminContacts() {
                     </div>
                   </div>
                   <div className="space-y-2">
+                    <label className="text-sm font-medium">Телефон</label>
+                    <div className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm text-muted-foreground">
+                      [Потребителско поле]
+                    </div>
+                  </div>
+                  <div className="space-y-2">
                     <label className="text-sm font-medium">Съобщение</label>
                     <div className="min-h-[120px] rounded-md border border-input bg-background px-3 py-2 text-sm text-muted-foreground">
                       [Потребителско поле]

@@ -19,6 +19,7 @@ export default function Contacts() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
   })
 
@@ -43,7 +44,7 @@ export default function Contacts() {
     setSubmitStatus(null)
 
     try {
-      const text = `Име: ${formData.name}\nИмейл: ${formData.email}\n\nСъобщение:\n${formData.message}`
+      const text = `Име: ${formData.name}\nИмейл: ${formData.email}\nТелефон: ${formData.phone}\n\nСъобщение:\n${formData.message}`
 
       await sendEmail({
         fromName: formData.name,
@@ -55,6 +56,7 @@ export default function Contacts() {
       setFormData({
         name: "",
         email: "",
+        phone: "",
         message: "",
       })
     } catch (error) {
@@ -194,6 +196,19 @@ export default function Contacts() {
                       name="email"
                       type="email"
                       value={formData.email}
+                      onChange={handleChange}
+                      required
+                      disabled={submitting}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Телефон</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
                       onChange={handleChange}
                       required
                       disabled={submitting}

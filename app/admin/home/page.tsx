@@ -274,12 +274,12 @@ export default function AdminHome() {
                   <Input
                     value={service.title}
                     onChange={(e) => updateService(index, "title", e.target.value)}
-                    className="mb-3 text-xl font-semibold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full break-words"
+                    className="mb-3 text-lg font-semibold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full break-words"
                   />
                   <textarea
                     value={service.description}
                     onChange={(e) => updateService(index, "description", e.target.value)}
-                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap break-words"
+                    className="text-base text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap break-words"
                     rows={4}
                   />
                 </div>
