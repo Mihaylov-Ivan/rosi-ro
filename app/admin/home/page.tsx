@@ -1,12 +1,12 @@
 "use client"
 
-import Image from "next/image"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Building2, FileCheck, ClipboardCheck, Mail, Phone, Save, LogOut, Edit2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { HomeContent } from "@/lib/data/home"
+import { Building2, ClipboardCheck, FileCheck, HardHat, LogOut, Save, Wrench } from "lucide-react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function AdminHome() {
   const [content, setContent] = useState<HomeContent | null>(null)
@@ -260,7 +260,7 @@ export default function AdminHome() {
           />
           <div className="grid gap-8 md:grid-cols-3">
             {content.services.items.map((service, index) => {
-              const icons = [Building2, FileCheck, ClipboardCheck]
+              const icons = [Building2, FileCheck, ClipboardCheck, Wrench, HardHat]
               const Icon = icons[index] || Building2
               const iconBgClass = "bg-salmon"
               return (
