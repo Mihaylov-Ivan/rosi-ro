@@ -183,7 +183,6 @@ export default function Contacts() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      placeholder="Вашето име"
                       disabled={submitting}
                     />
                   </div>
@@ -197,7 +196,6 @@ export default function Contacts() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      placeholder="ваш@имейл.com"
                       disabled={submitting}
                     />
                   </div>
@@ -210,7 +208,6 @@ export default function Contacts() {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      placeholder="Вашето съобщение..."
                       rows={6}
                       disabled={submitting}
                     />

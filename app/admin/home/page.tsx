@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { HomeContent } from "@/lib/data/home"
-import { Building2, ClipboardCheck, FileCheck, HardHat, LogOut, Save, Wrench } from "lucide-react"
+import { FileCheck, LogOut, Save } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -258,15 +258,15 @@ export default function AdminHome() {
             }
             className="mb-12 text-3xl font-bold text-center border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
           />
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
             {content.services.items.map((service, index) => {
-              const icons = [Building2, FileCheck, ClipboardCheck, Wrench, HardHat]
-              const Icon = icons[index] || Building2
+              const icons = [FileCheck, FileCheck, FileCheck, FileCheck, FileCheck]
+              const Icon = icons[index] || FileCheck
               const iconBgClass = "bg-salmon"
               return (
                 <div
                   key={service.id}
-                  className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg"
+                  className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg min-w-0"
                 >
                   <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${iconBgClass}`}>
                     <Icon className="h-6 w-6 text-primary" />
@@ -274,12 +274,12 @@ export default function AdminHome() {
                   <Input
                     value={service.title}
                     onChange={(e) => updateService(index, "title", e.target.value)}
-                    className="mb-3 text-xl font-semibold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+                    className="mb-3 text-xl font-semibold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full break-words"
                   />
                   <textarea
                     value={service.description}
                     onChange={(e) => updateService(index, "description", e.target.value)}
-                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap"
+                    className="text-muted-foreground leading-relaxed border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap break-words"
                     rows={4}
                   />
                 </div>

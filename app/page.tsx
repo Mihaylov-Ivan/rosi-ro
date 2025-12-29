@@ -1,11 +1,11 @@
 "use client"
 
-import Image from "next/image"
-import Link from "next/link"
-import { useState, useEffect } from "react"
-import { Building2, FileCheck, ClipboardCheck, Mail, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { HomeContent } from "@/lib/data/home"
+import { FileCheck } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export default function Home() {
   const [content, setContent] = useState<HomeContent | null>(null)
@@ -82,21 +82,21 @@ export default function Home() {
       <section className="bg-burgundy-dark py-16">
         <div className="container mx-auto px-4">
           <h2 className="mb-12 text-3xl font-bold text-center">{content.services.title}</h2>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
             {content.services.items.map((service, index) => {
-              const icons = [Building2, FileCheck, ClipboardCheck]
-              const Icon = icons[index] || Building2
+              const icons = [FileCheck, FileCheck, FileCheck, FileCheck, FileCheck]
+              const Icon = icons[index] || FileCheck
               const iconBgClass = "bg-salmon"
               return (
                 <div
                   key={service.id}
-                  className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg"
+                  className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg min-w-0"
                 >
                   <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${iconBgClass}`}>
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="mb-3 text-xl font-semibold">{service.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{service.description}</p>
+                  <h3 className="mb-3 text-xl font-semibold break-words">{service.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">{service.description}</p>
                 </div>
               )
             })}
