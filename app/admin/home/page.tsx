@@ -207,7 +207,7 @@ export default function AdminHome() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-muted to-background py-16">
+      <section className="bg-burgundy-light py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <Input
@@ -246,7 +246,7 @@ export default function AdminHome() {
       </section>
 
       {/* Services Section */}
-      <section className="py-16">
+      <section className="bg-burgundy-dark py-16">
         <div className="container mx-auto px-4">
           <Input
             value={content.services.title}
@@ -262,12 +262,13 @@ export default function AdminHome() {
             {content.services.items.map((service, index) => {
               const icons = [Building2, FileCheck, ClipboardCheck]
               const Icon = icons[index] || Building2
+              const iconBgClass = "bg-salmon"
               return (
                 <div
                   key={service.id}
                   className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg"
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${iconBgClass}`}>
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
                   <Input
@@ -289,7 +290,7 @@ export default function AdminHome() {
       </section>
 
       {/* About Section */}
-      <section className="bg-muted py-16">
+      <section className="bg-burgundy-light py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <Input
@@ -313,63 +314,6 @@ export default function AdminHome() {
                   rows={3}
                 />
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl">
-            <Input
-              value={content.contact.title}
-              onChange={(e) => updateContact("title", e.target.value)}
-              className="mb-8 text-3xl font-bold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
-            />
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Building2 className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-1 font-semibold">Адрес</h3>
-                  <Input
-                    value={content.contact.address}
-                    onChange={(e) => updateContact("address", e.target.value)}
-                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Phone className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-1 font-semibold">Телефон</h3>
-                  <Input
-                    value={content.contact.phone}
-                    onChange={(e) => updateContact("phone", e.target.value)}
-                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Mail className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-1 font-semibold">Имейл</h3>
-                  <Input
-                    type="email"
-                    value={content.contact.email}
-                    onChange={(e) => updateContact("email", e.target.value)}
-                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
-                  />
-                </div>
-              </div>
             </div>
           </div>
         </div>

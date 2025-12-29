@@ -281,7 +281,7 @@ export default function AdminPortfolio() {
 
       {/* Portfolio Header */}
       {header && (
-        <section className="bg-gradient-to-br from-muted to-background py-16">
+        <section className="bg-burgundy-light py-16">
           <div className="container mx-auto px-4">
             <Input
               value={header.title}
@@ -299,7 +299,7 @@ export default function AdminPortfolio() {
       )}
 
       {/* Portfolio Grid */}
-      <section className="py-16">
+      <section className="bg-burgundy-dark py-16">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="py-12 text-center text-muted-foreground">Зареждане...</div>

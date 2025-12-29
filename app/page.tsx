@@ -63,7 +63,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section with Contact Info */}
-      <section className="bg-gradient-to-br from-muted to-background py-16">
+      <section className="bg-burgundy-light py-16">
         <div className="container mx-auto px-4">
           <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
           <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
@@ -79,19 +79,20 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section className="py-16">
+      <section className="bg-burgundy-dark py-16">
         <div className="container mx-auto px-4">
           <h2 className="mb-12 text-3xl font-bold text-center">{content.services.title}</h2>
           <div className="grid gap-8 md:grid-cols-3">
             {content.services.items.map((service, index) => {
               const icons = [Building2, FileCheck, ClipboardCheck]
               const Icon = icons[index] || Building2
+              const iconBgClass = "bg-salmon"
               return (
                 <div
                   key={service.id}
                   className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg"
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${iconBgClass}`}>
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="mb-3 text-xl font-semibold">{service.title}</h3>
@@ -104,7 +105,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="bg-muted py-16">
+      <section className="bg-burgundy-light py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-8 text-3xl font-bold">{content.about.title}</h2>

@@ -109,7 +109,7 @@ export default function Contacts() {
       </header>
 
       {/* Contact Section */}
-      <section className="py-16">
+      <section className="bg-burgundy-light py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">
@@ -118,7 +118,7 @@ export default function Contacts() {
                 <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
                       <Building2 className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -128,7 +128,7 @@ export default function Contacts() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
                       <Phone className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -143,7 +143,7 @@ export default function Contacts() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
                       <Mail className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -160,7 +160,7 @@ export default function Contacts() {
               </div>
 
               {/* Contact Form */}
-              <div>
+              <div className="bg-salmon p-8 rounded-lg">
                 <h2 className="mb-8 text-3xl font-bold">Изпратете запитване</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {submitStatus === "success" && (
