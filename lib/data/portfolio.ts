@@ -25,9 +25,9 @@ interface PortfolioRow {
   category: string;
   image: string;
   description: string;
-  location: string;
-  year: string;
-  scope: string;
+  location: string | null;
+  year: string | null;
+  scope: string | null;
 }
 
 // Transform database row to PortfolioProject
@@ -39,9 +39,9 @@ function transformRow(row: PortfolioRow): PortfolioProject {
     image: row.image,
     description: row.description,
     details: {
-      location: row.location,
-      year: row.year,
-      scope: row.scope,
+      location: row.location || "",
+      year: row.year || "",
+      scope: row.scope || "",
     },
   };
 }
