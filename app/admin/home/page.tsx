@@ -7,11 +7,19 @@ import { Textarea } from "@/components/ui/textarea"
 import type { HomeContent } from "@/lib/data/home"
 import type { PortfolioProject } from "@/lib/data/portfolio"
 import { ImageUpload } from "@/components/ui/image-upload"
-import { Plus, Trash2, Edit, LogOut, Save, Building2, Mail, Phone } from "lucide-react"
+import { Plus, Trash2, Edit, LogOut, Save, Building2, Mail, Phone, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+
+// Define the 4 portfolio categories
+const PORTFOLIO_CATEGORIES = [
+  "Жилищно строителство",
+  "Търговско строителство",
+  "Индустриално строителство",
+  "Реновации",
+] as const
 
 export default function AdminHome() {
   const [content, setContent] = useState<HomeContent | null>(null)
@@ -32,6 +40,7 @@ export default function AdminHome() {
     scope: "",
   })
   const router = useRouter()
+  const scrollRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   useEffect(() => {
     checkAuth()
@@ -87,7 +96,7 @@ export default function AdminHome() {
     setEditingProject(null)
     setFormData({
       title: "",
-      category: "",
+      category: PORTFOLIO_CATEGORIES[0],
       image: "",
       description: "",
       location: "",
@@ -99,9 +108,12 @@ export default function AdminHome() {
 
   const openEditDialog = (project: PortfolioProject) => {
     setEditingProject(project)
+    const validCategory = PORTFOLIO_CATEGORIES.includes(project.category as any)
+      ? project.category
+      : PORTFOLIO_CATEGORIES[0]
     setFormData({
       title: project.title,
-      category: project.category,
+      category: validCategory,
       image: project.image,
       description: project.description,
       location: project.details.location,
@@ -119,15 +131,30 @@ export default function AdminHome() {
       return
     }
 
+    if (!formData.title || formData.title.trim() === "") {
+      alert("Моля, въведете заглавие")
+      return
+    }
+
+    if (!formData.category || !PORTFOLIO_CATEGORIES.includes(formData.category as any)) {
+      alert("Моля, изберете валидна категория")
+      return
+    }
+
+    if (!formData.description || formData.description.trim() === "") {
+      alert("Моля, въведете описание")
+      return
+    }
+
     const projectData = {
       title: formData.title,
       category: formData.category,
       image: formData.image,
       description: formData.description,
       details: {
-        location: formData.location,
-        year: formData.year,
-        scope: formData.scope,
+        location: formData.location.trim() || "",
+        year: formData.year.trim() || "",
+        scope: formData.scope.trim() || "",
       },
     }
 
@@ -371,59 +398,112 @@ export default function AdminHome() {
           {loading ? (
             <div className="py-12 text-center text-muted-foreground">Зареждане...</div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] relative"
-                >
-                  {/* Edit/Delete buttons overlay */}
-                  <div className="absolute top-2 right-2 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => openEditDialog(project)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(project.id)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+            <div className="space-y-12">
+              {PORTFOLIO_CATEGORIES.map((category) => {
+                const categoryProjects = projects.filter((p) => p.category === category)
+                if (categoryProjects.length === 0) return null
+
+                const scrollLeft = () => {
+                  const container = scrollRefs.current[category]
+                  if (container) {
+                    container.scrollBy({ left: -400, behavior: "smooth" })
+                  }
+                }
+
+                const scrollRight = () => {
+                  const container = scrollRefs.current[category]
+                  if (container) {
+                    container.scrollBy({ left: 400, behavior: "smooth" })
+                  }
+                }
+
+                return (
+                  <div key={category} className="space-y-4">
+                    <h2 className="text-2xl font-bold">{category}</h2>
+                    <div className="relative group">
+                      {/* Left Arrow */}
+                      <button
+                        onClick={scrollLeft}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center hover:bg-accent transition-colors opacity-0 group-hover:opacity-100"
+                        aria-label="Scroll left"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+
+                      {/* Scrollable Container */}
+                      <div
+                        ref={(el) => {
+                          scrollRefs.current[category] = el
+                        }}
+                        className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                      >
+                        {categoryProjects.map((project) => (
+                          <div
+                            key={project.id}
+                            className="group flex-shrink-0 w-80 overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] relative"
+                          >
+                            {/* Edit/Delete buttons overlay */}
+                            <div className="absolute top-2 right-2 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => openEditDialog(project)}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => handleDelete(project.id)}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                            <button
+                              onClick={() => setSelectedProject(project)}
+                              className="w-full text-left"
+                            >
+                              <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                                {project.image ? (
+                                  <Image
+                                    src={project.image}
+                                    alt={project.title}
+                                    fill
+                                    className="object-cover transition-transform group-hover:scale-105"
+                                  />
+                                ) : (
+                                  <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                                    No image
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-6">
+                                <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
+                                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                                  {project.title}
+                                </h3>
+                                <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                              </div>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Right Arrow */}
+                      <button
+                        onClick={scrollRight}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center hover:bg-accent transition-colors opacity-0 group-hover:opacity-100"
+                        aria-label="Scroll right"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => setSelectedProject(project)}
-                    className="w-full text-left"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                      {project.image ? (
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          className="object-cover transition-transform group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
-                          No image
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
-                      <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
-                    </div>
-                  </button>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
@@ -544,20 +624,28 @@ export default function AdminHome() {
                   <p className="text-muted-foreground leading-relaxed">{selectedProject.description}</p>
                 </div>
 
-                <div className="grid gap-4 border-t border-border pt-6 md:grid-cols-3">
-                  <div>
-                    <h4 className="mb-1 font-semibold">Локация</h4>
-                    <p className="text-muted-foreground">{selectedProject.details.location}</p>
+                {(selectedProject.details.location?.trim() || selectedProject.details.year?.trim() || selectedProject.details.scope?.trim()) && (
+                  <div className="grid gap-4 border-t border-border pt-6 md:grid-cols-3">
+                    {selectedProject.details.location?.trim() && (
+                      <div>
+                        <h4 className="mb-1 font-semibold">Локация</h4>
+                        <p className="text-muted-foreground">{selectedProject.details.location}</p>
+                      </div>
+                    )}
+                    {selectedProject.details.year?.trim() && (
+                      <div>
+                        <h4 className="mb-1 font-semibold">Година</h4>
+                        <p className="text-muted-foreground">{selectedProject.details.year}</p>
+                      </div>
+                    )}
+                    {selectedProject.details.scope?.trim() && (
+                      <div>
+                        <h4 className="mb-1 font-semibold">Обхват</h4>
+                        <p className="text-muted-foreground">{selectedProject.details.scope}</p>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <h4 className="mb-1 font-semibold">Година</h4>
-                    <p className="text-muted-foreground">{selectedProject.details.year}</p>
-                  </div>
-                  <div>
-                    <h4 className="mb-1 font-semibold">Обхват</h4>
-                    <p className="text-muted-foreground">{selectedProject.details.scope}</p>
-                  </div>
-                </div>
+                )}
               </div>
             </>
           )}
@@ -583,12 +671,20 @@ export default function AdminHome() {
 
             <div className="space-y-2">
               <Label htmlFor="category">Категория *</Label>
-              <Input
+              <select
                 id="category"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 required
-              />
+              >
+                <option value="">Изберете категория</option>
+                {PORTFOLIO_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-2">
@@ -612,32 +708,29 @@ export default function AdminHome() {
 
             <div className="grid gap-4 md:grid-cols-3">
               <div className="space-y-2">
-                <Label htmlFor="location">Локация *</Label>
+                <Label htmlFor="location">Локация</Label>
                 <Input
                   id="location"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="year">Година *</Label>
+                <Label htmlFor="year">Година</Label>
                 <Input
                   id="year"
                   value={formData.year}
                   onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                  required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="scope">Обхват *</Label>
+                <Label htmlFor="scope">Обхват</Label>
                 <Input
                   id="scope"
                   value={formData.scope}
                   onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
-                  required
                 />
               </div>
             </div>

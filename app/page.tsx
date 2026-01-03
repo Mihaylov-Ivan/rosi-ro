@@ -4,16 +4,25 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import type { HomeContent } from "@/lib/data/home"
 import type { PortfolioProject } from "@/lib/data/portfolio"
-import { Building2, Mail, Phone } from "lucide-react"
+import { Building2, Mail, Phone, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
+
+// Define the 4 portfolio categories
+const PORTFOLIO_CATEGORIES = [
+  "Жилищно строителство",
+  "Търговско строителство",
+  "Индустриално строителство",
+  "Реновации",
+] as const
 
 export default function Home() {
   const [content, setContent] = useState<HomeContent | null>(null)
   const [projects, setProjects] = useState<PortfolioProject[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
+  const scrollRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   useEffect(() => {
     async function loadContent() {
@@ -93,36 +102,89 @@ export default function Home() {
           {loading ? (
             <div className="py-12 text-center text-muted-foreground">Зареждане...</div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
-                <button
-                  key={project.id}
-                  onClick={() => setSelectedProject(project)}
-                  className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                    {project.image ? (
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover transition-transform group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
-                        No image
+            <div className="space-y-12">
+              {PORTFOLIO_CATEGORIES.map((category) => {
+                const categoryProjects = projects.filter((p) => p.category === category)
+                if (categoryProjects.length === 0) return null
+
+                const scrollLeft = () => {
+                  const container = scrollRefs.current[category]
+                  if (container) {
+                    container.scrollBy({ left: -400, behavior: "smooth" })
+                  }
+                }
+
+                const scrollRight = () => {
+                  const container = scrollRefs.current[category]
+                  if (container) {
+                    container.scrollBy({ left: 400, behavior: "smooth" })
+                  }
+                }
+
+                return (
+                  <div key={category} className="space-y-4">
+                    <h2 className="text-2xl font-bold">{category}</h2>
+                    <div className="relative group">
+                      {/* Left Arrow */}
+                      <button
+                        onClick={scrollLeft}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center hover:bg-accent transition-colors opacity-0 group-hover:opacity-100"
+                        aria-label="Scroll left"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+
+                      {/* Scrollable Container */}
+                      <div
+                        ref={(el) => {
+                          scrollRefs.current[category] = el
+                        }}
+                        className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                      >
+                        {categoryProjects.map((project) => (
+                          <button
+                            key={project.id}
+                            onClick={() => setSelectedProject(project)}
+                            className="group flex-shrink-0 w-80 overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left"
+                          >
+                            <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                              {project.image ? (
+                                <Image
+                                  src={project.image}
+                                  alt={project.title}
+                                  fill
+                                  className="object-cover transition-transform group-hover:scale-105"
+                                />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                                  No image
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-6">
+                              <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
+                              <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                                {project.title}
+                              </h3>
+                              <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                            </div>
+                          </button>
+                        ))}
                       </div>
-                    )}
+
+                      {/* Right Arrow */}
+                      <button
+                        onClick={scrollRight}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center hover:bg-accent transition-colors opacity-0 group-hover:opacity-100"
+                        aria-label="Scroll right"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="p-6">
-                    <div className="mb-2 text-sm font-medium text-primary">{project.category}</div>
-                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
-                  </div>
-                </button>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
@@ -224,20 +286,28 @@ export default function Home() {
                   <p className="text-muted-foreground leading-relaxed">{selectedProject.description}</p>
                 </div>
 
-                <div className="grid gap-4 border-t border-border pt-6 md:grid-cols-3">
-                  <div>
-                    <h4 className="mb-1 font-semibold">Локация</h4>
-                    <p className="text-muted-foreground">{selectedProject.details.location}</p>
+                {(selectedProject.details.location?.trim() || selectedProject.details.year?.trim() || selectedProject.details.scope?.trim()) && (
+                  <div className="grid gap-4 border-t border-border pt-6 md:grid-cols-3">
+                    {selectedProject.details.location?.trim() && (
+                      <div>
+                        <h4 className="mb-1 font-semibold">Локация</h4>
+                        <p className="text-muted-foreground">{selectedProject.details.location}</p>
+                      </div>
+                    )}
+                    {selectedProject.details.year?.trim() && (
+                      <div>
+                        <h4 className="mb-1 font-semibold">Година</h4>
+                        <p className="text-muted-foreground">{selectedProject.details.year}</p>
+                      </div>
+                    )}
+                    {selectedProject.details.scope?.trim() && (
+                      <div>
+                        <h4 className="mb-1 font-semibold">Обхват</h4>
+                        <p className="text-muted-foreground">{selectedProject.details.scope}</p>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <h4 className="mb-1 font-semibold">Година</h4>
-                    <p className="text-muted-foreground">{selectedProject.details.year}</p>
-                  </div>
-                  <div>
-                    <h4 className="mb-1 font-semibold">Обхват</h4>
-                    <p className="text-muted-foreground">{selectedProject.details.scope}</p>
-                  </div>
-                </div>
+                )}
               </div>
             </>
           )}
