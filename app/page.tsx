@@ -22,6 +22,7 @@ const PORTFOLIO_CATEGORIES = [
 export default function Home() {
   const [content, setContent] = useState<HomeContent | null>(null)
   const [projects, setProjects] = useState<PortfolioProject[]>([])
+  const [categoryImages, setCategoryImages] = useState<Record<string, string | null>>({})
   const [loading, setLoading] = useState(true)
   const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -29,14 +30,24 @@ export default function Home() {
   useEffect(() => {
     async function loadContent() {
       try {
-        const [homeResponse, portfolioResponse] = await Promise.all([
+        const [homeResponse, portfolioResponse, categoriesResponse] = await Promise.all([
           fetch("/api/home"),
           fetch("/api/portfolio"),
+          fetch("/api/portfolio-categories"),
         ])
         const homeData = await homeResponse.json()
         const portfolioData = await portfolioResponse.json()
+        const categoriesData = await categoriesResponse.json()
+
         setContent(homeData)
         setProjects(portfolioData)
+
+        // Create a map of category name to image
+        const imagesMap: Record<string, string | null> = {}
+        categoriesData.forEach((cat: { name: string; image: string | null }) => {
+          imagesMap[cat.name] = cat.image
+        })
+        setCategoryImages(imagesMap)
       } catch (error) {
         console.error("Error loading home content:", error)
       } finally {
@@ -108,18 +119,29 @@ export default function Home() {
               {PORTFOLIO_CATEGORIES.map((category) => {
                 const categoryProjects = projects.filter((p) => p.category === category)
                 const projectCount = categoryProjects.length
+                const categoryImage = categoryImages[category]
 
                 return (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className="group relative overflow-hidden rounded-lg border border-border bg-card p-8 transition-all hover:shadow-xl hover:scale-[1.02] text-left h-full"
+                    className="group relative overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left h-full flex flex-col"
                   >
-                    <div className="space-y-4">
+                    {categoryImage && (
+                      <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted flex-shrink-0">
+                        <Image
+                          src={categoryImage}
+                          alt={category}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    <div className={`p-8 flex-1 flex flex-col ${categoryImage ? '' : 'justify-center'}`}>
                       <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">
                         {category}
                       </h2>
-                      <p className="text-muted-foreground">
+                      <p className="text-muted-foreground mt-2">
                         {projectCount === 0
                           ? "Няма проекти"
                           : projectCount === 1
@@ -127,7 +149,7 @@ export default function Home() {
                             : `${projectCount} проекта`}
                       </p>
                       {projectCount > 0 && (
-                        <div className="flex items-center text-primary font-medium">
+                        <div className="flex items-center text-primary font-medium mt-4">
                           Вижте проектите
                           <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </div>

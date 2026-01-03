@@ -25,6 +25,8 @@ const PORTFOLIO_CATEGORIES = [
 export default function AdminHome() {
   const [content, setContent] = useState<HomeContent | null>(null)
   const [projects, setProjects] = useState<PortfolioProject[]>([])
+  const [categoryImages, setCategoryImages] = useState<Record<string, string | null>>({})
+  const [editingCategory, setEditingCategory] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -67,14 +69,23 @@ export default function AdminHome() {
 
   const loadContent = async () => {
     try {
-      const [homeResponse, portfolioResponse] = await Promise.all([
+      const [homeResponse, portfolioResponse, categoriesResponse] = await Promise.all([
         fetch("/api/home"),
         fetch("/api/portfolio"),
+        fetch("/api/portfolio-categories"),
       ])
       const homeData = await homeResponse.json()
       const portfolioData = await portfolioResponse.json()
+      const categoriesData = await categoriesResponse.json()
       setContent(homeData)
       setProjects(portfolioData)
+
+      // Create a map of category name to image
+      const imagesMap: Record<string, string | null> = {}
+      categoriesData.forEach((cat: { name: string; image: string | null }) => {
+        imagesMap[cat.name] = cat.image
+      })
+      setCategoryImages(imagesMap)
     } catch (error) {
       console.error("Error loading home content:", error)
     } finally {
@@ -392,6 +403,64 @@ export default function AdminHome() {
         </div>
       </section>
 
+      {/* Portfolio Categories Section */}
+      <section className="bg-bone-base py-16">
+        <div className="container mx-auto px-4">
+          <div className="space-y-8">
+            <h2 className="text-3xl font-bold">Категории на портфолио</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {PORTFOLIO_CATEGORIES.map((category) => {
+                const categoryImage = categoryImages[category]
+                const categoryProjects = projects.filter((p) => p.category === category)
+                const projectCount = categoryProjects.length
+
+                return (
+                  <div
+                    key={category}
+                    className="group relative overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl flex flex-col"
+                  >
+                    <button
+                      onClick={() => setEditingCategory(category)}
+                      className="text-left w-full"
+                    >
+                      {categoryImage ? (
+                        <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted flex-shrink-0">
+                          <Image
+                            src={categoryImage}
+                            alt={category}
+                            fill
+                            className="object-cover transition-transform group-hover:scale-105"
+                          />
+                        </div>
+                      ) : (
+                        <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted flex-shrink-0 flex items-center justify-center">
+                          <p className="text-muted-foreground text-sm">Няма изображение</p>
+                        </div>
+                      )}
+                      <div className="p-6 flex-1 flex flex-col">
+                        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                          {category}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {projectCount === 0
+                            ? "Няма проекти"
+                            : projectCount === 1
+                              ? "1 проект"
+                              : `${projectCount} проекта`}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Кликнете за редактиране на изображението
+                        </p>
+                      </div>
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Portfolio Section */}
       <section className="bg-bone-base py-16">
         <div className="container mx-auto px-4">
@@ -595,6 +664,47 @@ export default function AdminHome() {
                 )}
               </div>
             </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Category Image Dialog */}
+      <Dialog open={!!editingCategory} onOpenChange={() => setEditingCategory(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Редактиране на изображение за категория</DialogTitle>
+          </DialogHeader>
+          {editingCategory && (
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">{editingCategory}</h3>
+              </div>
+              <div className="space-y-2">
+                <Label>Изображение на категорията</Label>
+                <ImageUpload
+                  value={categoryImages[editingCategory] || ""}
+                  onChange={async (url) => {
+                    try {
+                      await fetch("/api/portfolio-categories", {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name: editingCategory, image: url || null }),
+                      })
+                      setCategoryImages({ ...categoryImages, [editingCategory]: url || null })
+                      setEditingCategory(null)
+                    } catch (error) {
+                      console.error("Error updating category image:", error)
+                      alert("Неуспешно обновяване на изображението")
+                    }
+                  }}
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-4">
+                <Button type="button" variant="outline" onClick={() => setEditingCategory(null)}>
+                  Отказ
+                </Button>
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>
