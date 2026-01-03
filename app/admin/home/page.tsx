@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import type { HomeContent } from "@/lib/data/home"
 import type { PortfolioProject } from "@/lib/data/portfolio"
 import { ImageUpload } from "@/components/ui/image-upload"
-import { Plus, Trash2, Edit, LogOut, Save } from "lucide-react"
+import { Plus, Trash2, Edit, LogOut, Save, Building2, Mail, Phone } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -364,7 +365,7 @@ export default function AdminHome() {
         </div>
       </section>
 
-      {/* Portfolio Section (replacing Services) */}
+      {/* Portfolio Section */}
       <section className="bg-bone-base py-16">
         <div className="container mx-auto px-4">
           {loading ? (
@@ -453,6 +454,64 @@ export default function AdminHome() {
                   rows={3}
                 />
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contacts Section */}
+      <section className="bg-bone-base py-12">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl">
+            <Input
+              value={content.contact.title}
+              onChange={(e) => updateContact("title", e.target.value)}
+              className="mb-8 text-3xl font-bold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+            />
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
+                  <Building2 className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="mb-1 font-semibold">Адрес</h3>
+                  <Textarea
+                    value={content.contact.address}
+                    onChange={(e) => updateContact("address", e.target.value)}
+                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap"
+                    rows={2}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
+                  <Phone className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="mb-1 font-semibold">Телефон</h3>
+                  <Input
+                    value={content.contact.phone}
+                    onChange={(e) => updateContact("phone", e.target.value)}
+                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
+                  <Mail className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="mb-1 font-semibold">Имейл</h3>
+                  <Input
+                    type="email"
+                    value={content.contact.email}
+                    onChange={(e) => updateContact("email", e.target.value)}
+                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
