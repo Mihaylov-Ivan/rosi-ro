@@ -173,7 +173,7 @@ export default function AdminServices() {
       </header>
 
       {/* Services Header */}
-      <section className="bg-burgundy-light py-8">
+      <section className="bg-bone-light py-8">
         <div className="container mx-auto px-4">
           <Input
             value={content.services.title}
@@ -189,7 +189,7 @@ export default function AdminServices() {
       </section>
 
       {/* Services Grid */}
-      <section className="bg-burgundy-dark py-16">
+      <section className="bg-bone-base py-16">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
             {content.services.items.map((service, index) => (

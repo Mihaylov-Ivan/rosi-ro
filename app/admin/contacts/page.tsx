@@ -172,12 +172,12 @@ export default function AdminContacts() {
       </header>
 
       {/* Contact Section */}
-      <section className="bg-burgundy-light py-12">
+      <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">
               {/* Contact Info */}
-              <div className="bg-salmon p-8 rounded-lg">
+              <div className="bg-bone-dark p-8 rounded-lg">
                 <Input
                   value={content.contact.title}
                   onChange={(e) => updateContact("title", e.target.value)}
@@ -185,7 +185,7 @@ export default function AdminContacts() {
                 />
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
                       <Building2 className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1">
@@ -200,7 +200,7 @@ export default function AdminContacts() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
                       <Phone className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1">
@@ -214,7 +214,7 @@ export default function AdminContacts() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
                       <Mail className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1">
@@ -231,7 +231,7 @@ export default function AdminContacts() {
               </div>
 
               {/* Contact Form Section - Read Only Preview */}
-              <div className="bg-salmon p-8 rounded-lg">
+              <div className="bg-bone-dark p-8 rounded-lg">
                 <h2 className="mb-8 text-3xl font-bold">Изпратете запитване</h2>
                 <div className="rounded-lg border border-border bg-card p-6 space-y-4">
                   <div className="space-y-2">

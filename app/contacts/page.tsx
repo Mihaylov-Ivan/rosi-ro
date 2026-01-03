@@ -111,16 +111,16 @@ export default function Contacts() {
       </header>
 
       {/* Contact Section */}
-      <section className="bg-burgundy-light py-12">
+      <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-12 lg:grid-cols-2">
               {/* Contact Info */}
-              <div className="bg-salmon p-8 rounded-lg">
+              <div className="bg-bone-dark p-8 rounded-lg">
                 <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
                       <Building2 className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -130,7 +130,7 @@ export default function Contacts() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
                       <Phone className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -145,7 +145,7 @@ export default function Contacts() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-salmon">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
                       <Mail className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -162,7 +162,7 @@ export default function Contacts() {
               </div>
 
               {/* Contact Form */}
-              <div className="bg-salmon p-8 rounded-lg">
+              <div className="bg-bone-dark p-8 rounded-lg">
                 <h2 className="mb-8 text-3xl font-bold">Изпратете запитване</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {submitStatus === "success" && (

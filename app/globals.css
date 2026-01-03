@@ -37,9 +37,9 @@
   --sidebar-accent-foreground: oklch(0.15 0.01 280);
   --sidebar-border: oklch(0.9 0.01 85);
   --sidebar-ring: #64182a;
-  --bg-burgundy-light: oklch(0.98 0.01 20);
-  --bg-burgundy-dark: oklch(0.96 0.012 18);
-  --bg-salmon: oklch(0.93 0.015 32);
+  --bg-bone-light: oklch(0.92 0.012 85);
+  --bg-bone-base: oklch(0.85 0.015 85);
+  --bg-bone-dark: oklch(0.77 0.015 85);
 }
 
 .dark {
@@ -75,9 +75,9 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
-  --bg-burgundy-light: oklch(0.22 0.025 20);
-  --bg-burgundy-dark: oklch(0.25 0.035 18);
-  --bg-salmon: oklch(0.24 0.03 32);
+  --bg-bone-light: oklch(0.4 0.02 85);
+  --bg-bone-base: oklch(0.38 0.025 85);
+  --bg-bone-dark: oklch(0.3 0.025 85);
 }
 
 @theme inline {
@@ -119,9 +119,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-burgundy-light: var(--bg-burgundy-light);
-  --color-burgundy-dark: var(--bg-burgundy-dark);
-  --color-salmon: var(--bg-salmon);
+  --color-bone-light: var(--bg-bone-light);
+  --color-bone-base: var(--bg-bone-base);
+  --color-bone-dark: var(--bg-bone-dark);
 }
 
 @layer base {

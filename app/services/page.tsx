@@ -53,14 +53,14 @@ export default function Services() {
       </header>
 
       {/* Services Header */}
-      <section className="bg-burgundy-light py-8">
+      <section className="bg-bone-light py-8">
         <div className="container mx-auto px-4">
           <h1 className="mb-4 text-4xl font-bold text-balance">Услуги</h1>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="bg-burgundy-dark py-16">
+      <section className="bg-bone-base py-16">
         <div className="container mx-auto px-4">
           {loading || !content ? (
             <div className="py-12 text-center text-muted-foreground">Зареждане...</div>

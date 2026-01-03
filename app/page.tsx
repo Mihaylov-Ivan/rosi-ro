@@ -71,7 +71,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section with Contact Info */}
-      <section className="bg-burgundy-light py-12">
+      <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">
           <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
           <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
@@ -87,7 +87,7 @@ export default function Home() {
       </section>
 
       {/* Portfolio Section (replacing Services) */}
-      <section className="bg-burgundy-dark py-16">
+      <section className="bg-bone-base py-16">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="py-12 text-center text-muted-foreground">Зареждане...</div>
@@ -128,7 +128,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="bg-burgundy-light py-12">
+      <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-8 text-3xl font-bold">{content.about.title}</h2>

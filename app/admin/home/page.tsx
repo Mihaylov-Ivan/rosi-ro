@@ -326,7 +326,7 @@ export default function AdminHome() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-burgundy-light py-12">
+      <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <Input
@@ -365,7 +365,7 @@ export default function AdminHome() {
       </section>
 
       {/* Portfolio Section (replacing Services) */}
-      <section className="bg-burgundy-dark py-16">
+      <section className="bg-bone-base py-16">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="py-12 text-center text-muted-foreground">Зареждане...</div>
@@ -429,7 +429,7 @@ export default function AdminHome() {
       </section>
 
       {/* About Section */}
-      <section className="bg-burgundy-light py-12">
+      <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <Input
