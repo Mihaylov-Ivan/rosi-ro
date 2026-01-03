@@ -1,17 +1,17 @@
 "use client"
 
+import { ContactItemEditable } from "@/components/contact-item-editable"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { ImageUpload } from "@/components/ui/image-upload"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import type { HomeContent } from "@/lib/data/home"
 import type { PortfolioProject } from "@/lib/data/portfolio"
-import { ImageUpload } from "@/components/ui/image-upload"
-import { Plus, Trash2, Edit, LogOut, Save, Building2, Mail, Phone } from "lucide-react"
+import { Building2, Edit, Facebook, LogOut, Mail, Phone, Plus, Save, Trash2 } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useEffect, useState, useRef } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useEffect, useState } from "react"
 
 // Define the 5 portfolio categories
 const PORTFOLIO_CATEGORIES = [
@@ -510,49 +510,35 @@ export default function AdminHome() {
               className="mb-8 text-3xl font-bold border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
             />
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
-                  <Building2 className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-1 font-semibold">Адрес</h3>
-                  <Textarea
-                    value={content.contact.address}
-                    onChange={(e) => updateContact("address", e.target.value)}
-                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full resize-none whitespace-pre-wrap"
-                    rows={2}
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
-                  <Phone className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-1 font-semibold">Телефон</h3>
-                  <Input
-                    value={content.contact.phone}
-                    onChange={(e) => updateContact("phone", e.target.value)}
-                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
-                  <Mail className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-1 font-semibold">Имейл</h3>
-                  <Input
-                    type="email"
-                    value={content.contact.email}
-                    onChange={(e) => updateContact("email", e.target.value)}
-                    className="text-muted-foreground border-none bg-transparent p-0 focus-visible:ring-2 focus-visible:ring-ring rounded w-full"
-                  />
-                </div>
-              </div>
+              <ContactItemEditable
+                icon={Building2}
+                title="Адрес"
+                value={content.contact.address}
+                onChange={(value) => updateContact("address", value)}
+                type="textarea"
+                rows={2}
+              />
+              <ContactItemEditable
+                icon={Phone}
+                title="Телефон"
+                value={content.contact.phone}
+                onChange={(value) => updateContact("phone", value)}
+                type="tel"
+              />
+              <ContactItemEditable
+                icon={Mail}
+                title="Имейл"
+                value={content.contact.email}
+                onChange={(value) => updateContact("email", value)}
+                type="email"
+              />
+              <ContactItemEditable
+                icon={Facebook}
+                title="Facebook"
+                value={content.contact.facebook || "https://www.facebook.com/profile.php?id=61586010500517&locale=bg_BG"}
+                onChange={(value) => updateContact("facebook", value)}
+                type="url"
+              />
             </div>
           </div>
         </div>
