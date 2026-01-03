@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import sendEmail from "@/lib/actions/email"
 import type { HomeContent } from "@/lib/data/home"
-import { Building2, Mail, Phone } from "lucide-react"
+import { Building2, Mail, Phone, Facebook } from "lucide-react"
+import { ContactItem } from "@/components/contact-item"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -119,45 +120,30 @@ export default function Contacts() {
               <div className="bg-bone-dark p-8 rounded-lg">
                 <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2>
                 <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
-                      <Building2 className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="mb-1 font-semibold">Адрес</h3>
-                      <p className="text-muted-foreground whitespace-pre-wrap">{content.contact.address}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
-                      <Phone className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="mb-1 font-semibold">Телефон</h3>
-                      <a
-                        href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                        className="text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        {content.contact.phone}
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-bone-dark">
-                      <Mail className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="mb-1 font-semibold">Имейл</h3>
-                      <a
-                        href={`mailto:${content.contact.email}`}
-                        className="text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        {content.contact.email}
-                      </a>
-                    </div>
-                  </div>
+                  <ContactItem
+                    icon={Building2}
+                    title="Адрес"
+                    content={content.contact.address}
+                  />
+                  <ContactItem
+                    icon={Phone}
+                    title="Телефон"
+                    content={content.contact.phone}
+                    href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
+                  />
+                  <ContactItem
+                    icon={Mail}
+                    title="Имейл"
+                    content={content.contact.email}
+                    href={`mailto:${content.contact.email}`}
+                  />
+                  <ContactItem
+                    icon={Facebook}
+                    title="Facebook"
+                    content="Посетете нашата Facebook страница"
+                    href={content.contact.facebook || "https://www.facebook.com/profile.php?id=61586010500517&locale=bg_BG"}
+                    linkText="Роси Ро ЕООД"
+                  />
                 </div>
               </div>
 

@@ -30,6 +30,7 @@ export interface HomeContent {
     address: string;
     phone: string;
     email: string;
+    facebook?: string;
   };
   footer: {
     copyright: string;
