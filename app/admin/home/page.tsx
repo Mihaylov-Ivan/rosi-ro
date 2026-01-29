@@ -16,10 +16,10 @@ import { useEffect, useState } from "react"
 // Define the 5 portfolio categories
 const PORTFOLIO_CATEGORIES = [
   "Електроенергийни обекти",
-  "Промишлено-технологични обекти и складове",
+  "Промишлено-технологични и стопански обекти и складове",
   "Жилищни сгради и комплекси",
   "Обекти за обществено обслужване и търговия",
-  "Селско-стопански обекти",
+  // "Селско-стопански обекти",
 ] as const
 
 export default function AdminHome() {
