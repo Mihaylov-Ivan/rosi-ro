@@ -7,17 +7,17 @@ import "./globals.css"
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
-const siteTitle = "Rosi Ro (Роси Ро) ЕООД - Консултант строителен надзор"
+const siteTitle = "Rosy Ro (Роси Ро) ЕООД - Консултант строителен надзор"
 const siteDescription =
-  "Rosi Ro / Роси Ро ЕООД - професионални услуги за строителен надзор, одити и издаване на разрешителни за строителни обекти в гр. Хасково"
+  "Rosy Ro / Роси Ро ЕООД - професионални услуги за строителен надзор, одити и издаване на разрешителни за строителни обекти в гр. Хасково"
 
 export const metadata: Metadata = {
   title: siteTitle,
   description: siteDescription,
   keywords: [
-    "Rosi Ro",
+    "Rosy Ro",
     "Роси Ро",
-    "Rosi Ro Ltd.",
+    "Rosy Ro Ltd.",
     "Роси Ро ЕООД",
     "строителен надзор",
     "консултант строителен надзор",
@@ -60,7 +60,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Роси Ро ЕООД",
-    alternateName: ["Rosi Ro", "Rosi Ro Ltd.", "Роси Ро", "Роси Ро ЕООД"],
+    alternateName: ["Rosy Ro", "Rosy Ro Ltd.", "Роси Ро", "Роси Ро ЕООД"],
     description: siteDescription,
   }
 
