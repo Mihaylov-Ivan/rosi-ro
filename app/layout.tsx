@@ -7,11 +7,31 @@ import "./globals.css"
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
+const siteTitle = "Rosi Ro (Роси Ро) ЕООД - Консултант строителен надзор"
+const siteDescription =
+  "Rosi Ro / Роси Ро ЕООД - професионални услуги за строителен надзор, одити и издаване на разрешителни за строителни обекти в гр. Хасково"
+
 export const metadata: Metadata = {
-  title: "Роси Ро ЕООД - Консултант строителен надзор",
-  description:
-    "Професионални услуги за строителен надзор, одити и издаване на разрешителни за строителни обекти в гр. Хасково",
+  title: siteTitle,
+  description: siteDescription,
+  keywords: [
+    "Rosi Ro",
+    "Роси Ро",
+    "Rosi Ro Ltd.",
+    "Роси Ро ЕООД",
+    "строителен надзор",
+    "консултант строителен надзор",
+    "Хасково",
+    "строителни одити",
+    "разрешителни строителство",
+  ],
   generator: "v0.app",
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    type: "website",
+    locale: "bg",
+  },
   icons: {
     icon: [
       {
@@ -36,9 +56,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Роси Ро ЕООД",
+    alternateName: ["Rosi Ro", "Rosi Ro Ltd.", "Роси Ро", "Роси Ро ЕООД"],
+    description: siteDescription,
+  }
+
   return (
     <html lang="bg">
       <body className={`font-sans antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
         <Analytics />
       </body>

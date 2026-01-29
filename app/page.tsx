@@ -12,10 +12,10 @@ import { useEffect, useState, useRef } from "react"
 
 // Define the 5 portfolio categories
 const PORTFOLIO_CATEGORIES = [
-  "Електроенергийни обекти",
   "Промишлено-технологични и стопански обекти и складове",
   "Жилищни сгради и комплекси",
   "Обекти за обществено обслужване и търговия",
+  "Електроенергийни обекти",
   // "Селско-стопански обекти",
 ] as const
 
@@ -73,7 +73,7 @@ export default function Home() {
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/images/logo.png"
-              alt="Роси Ро ЕООД Лого"
+              alt="Роси Ро ЕООД Лого (Rosi Ro Ltd. Logo)"
               width={120}
               height={40}
               className="h-10 w-auto"
