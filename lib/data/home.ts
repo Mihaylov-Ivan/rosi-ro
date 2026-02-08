@@ -122,6 +122,38 @@ export async function getHomeContent(): Promise<HomeContent> {
   };
 }
 
+export interface ServiceItem {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export async function getService(id: string): Promise<ServiceItem | null> {
+  const supabase = createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("services")
+    .select("*")
+    .eq("id", id)
+    .eq("home_content_id", "home")
+    .single();
+
+  if (error || !data) {
+    if (error?.code === "PGRST116") return null;
+    if (error) {
+      console.error("Error fetching service:", error);
+      throw error;
+    }
+    return null;
+  }
+
+  return {
+    id: (data as ServiceRow).id,
+    title: (data as ServiceRow).title,
+    description: (data as ServiceRow).description,
+  };
+}
+
 export async function updateHomeContent(
   content: Partial<HomeContent>
 ): Promise<HomeContent> {

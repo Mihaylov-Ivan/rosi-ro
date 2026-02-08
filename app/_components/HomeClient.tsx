@@ -154,6 +154,13 @@ export default function HomeClient({ content, projects, categories }: HomeClient
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-8 text-3xl font-bold">{content.contact.title}</h2>
+            <p className="mb-6 text-muted-foreground">
+              Разгледайте{" "}
+              <Link href="/services" className="text-primary font-medium hover:underline">
+                нашите услуги
+              </Link>{" "}
+              или се свържете директно с нас по-долу.
+            </p>
             <div className="space-y-6">
               <ContactItem
                 icon={Building2}

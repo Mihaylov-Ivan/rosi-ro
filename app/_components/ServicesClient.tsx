@@ -41,12 +41,22 @@ export default function ServicesClient({ content }: ServicesClientProps) {
       <section className="bg-bone-light py-8">
         <div className="container mx-auto px-4">
           <h1 className="mb-4 text-4xl font-bold text-balance">Услуги</h1>
+          {/* <p className="text-lg text-muted-foreground leading-relaxed">
+            Роси Ро ЕООД предлага професионални услуги в областта на строителния надзор, проектирането и консултациите в Хасково. Изберете услуга по-долу за повече подробности. За запитвания и оферти,{" "}
+            <Link href="/contacts" className="text-primary font-medium hover:underline">
+              свържете се с нас
+            </Link>
+            .
+          </p> */}
         </div>
       </section>
 
       {/* Services Grid */}
       <section className="bg-bone-base py-16">
         <div className="container mx-auto px-4">
+          {/* <h2 className="mb-10 text-2xl font-bold">
+            {content.services.title || "Нашите услуги"}
+          </h2> */}
           <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
             {content.services.items.map((service) => (
               <div
