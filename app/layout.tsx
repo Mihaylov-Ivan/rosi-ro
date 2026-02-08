@@ -2,25 +2,34 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { toJsonLd } from "@/lib/jsonld"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
-const baseUrl =
+const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://rosi-ro.vercel.app")
 
-const siteTitle = "Rosy Ro (Роси Ро) ЕООД - Консултант строителен надзор"
-const siteDescription =
+const siteName = "Роси Ро ЕООД"
+const defaultTitle = "Rosy Ro (Роси Ро) ЕООД - Консултант строителен надзор"
+const defaultDescription =
   "Rosy Ro / Роси Ро ЕООД - строителен надзор, проектиране, промяна на предназначението и консултации в Хасково. Професионални услуги за строителен надзор, одити и разрешителни за строителни обекти."
 
 export const metadata: Metadata = {
-  title: siteTitle,
-  description: siteDescription,
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: defaultTitle,
+    template: `%s | ${siteName}`,
+  },
+  description: defaultDescription,
+  applicationName: siteName,
   keywords: [
     "Rosy Ro",
+    "Rosy",
     "Роси Ро",
+    "Роси",
     "Rosy Ro Ltd.",
     "Роси Ро ЕООД",
     "строителен надзор",
@@ -43,12 +52,38 @@ export const metadata: Metadata = {
     "строителни одити",
     "разрешителни строителство",
   ],
-  generator: "v0.app",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: siteTitle,
-    description: siteDescription,
     type: "website",
-    locale: "bg",
+    url: siteUrl,
+    siteName,
+    locale: "bg_BG",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: siteName,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/og.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
   icons: {
     icon: [
@@ -77,11 +112,11 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "@id": `${baseUrl}/#organization`,
+    "@id": `${siteUrl}/#organization`,
     name: "Роси Ро ЕООД",
-    alternateName: ["Rosy Ro", "Rosy Ro Ltd.", "Роси Ро", "Роси Ро ЕООД"],
-    description: siteDescription,
-    url: baseUrl,
+    alternateName: ["Rosy Ro", "Rosy Ro Ltd.", "Роси Ро", "Роси Ро ЕООД", "Rosy", "Роси"],
+    description: defaultDescription,
+    url: siteUrl,
     areaServed: {
       "@type": "City",
       name: "Хасково",
@@ -110,7 +145,7 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: toJsonLd(jsonLd) }}
         />
         {children}
         <Analytics />
