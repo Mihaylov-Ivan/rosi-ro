@@ -67,8 +67,10 @@ export default function HomeClient({ content, projects, categories }: HomeClient
       {/* Hero Section */}
       <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">
-          <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">{content.hero.title}</h1>
-          <p className="mb-4 text-2xl text-muted-foreground text-balance">{content.hero.subtitle}</p>
+          <h1 className="mb-6 text-5xl font-bold leading-tight text-balance">
+            {content.hero.title}
+            <span className="mt-1 block text-2xl font-normal text-muted-foreground text-balance">{content.hero.subtitle}</span>
+          </h1>
           <p className="mb-8 text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
             {content.hero.description}
           </p>
