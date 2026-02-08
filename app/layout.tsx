@@ -7,6 +7,10 @@ import "./globals.css"
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://rosi-ro.vercel.app")
+
 const siteTitle = "Rosy Ro (Роси Ро) ЕООД - Консултант строителен надзор"
 const siteDescription =
   "Rosy Ro / Роси Ро ЕООД - строителен надзор, проектиране, промяна на предназначението и консултации в Хасково. Професионални услуги за строителен надзор, одити и разрешителни за строителни обекти."
@@ -72,10 +76,33 @@ export default function RootLayout({
 }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "ProfessionalService",
+    "@id": `${baseUrl}/#organization`,
     name: "Роси Ро ЕООД",
     alternateName: ["Rosy Ro", "Rosy Ro Ltd.", "Роси Ро", "Роси Ро ЕООД"],
     description: siteDescription,
+    url: baseUrl,
+    areaServed: {
+      "@type": "City",
+      name: "Хасково",
+      "@id": "https://www.wikidata.org/wiki/Q1845",
+    },
+    serviceType: [
+      "Строителен надзор",
+      "Консултант строителен надзор",
+      "Проектиране",
+      "Промяна на предназначението",
+      "Консултации по строителство",
+      "Строителни одити",
+      "Разрешителни за строителство",
+    ],
+    knowsAbout: [
+      "строителен надзор",
+      "проектиране",
+      "промяна на предназначението",
+      "консултации",
+      "Хасково",
+    ],
   }
 
   return (
