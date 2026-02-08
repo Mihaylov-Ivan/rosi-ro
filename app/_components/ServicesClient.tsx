@@ -1,0 +1,77 @@
+"use client"
+
+import Image from "next/image"
+import Link from "next/link"
+import type { HomeContent } from "@/lib/data/home"
+
+interface ServicesClientProps {
+  content: HomeContent
+}
+
+export default function ServicesClient({ content }: ServicesClientProps) {
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto flex items-center gap-8 px-4 py-4">
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/images/logo.png"
+              alt="Роси Ро ЕООД Лого (Rosy Ro Ltd. Logo)"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+            />
+          </Link>
+          <nav className="flex gap-6">
+            <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
+              Начало
+            </Link>
+            <Link href="/services" className="text-sm font-medium text-primary">
+              Услуги
+            </Link>
+            <Link href="/contacts" className="text-sm font-medium hover:text-primary transition-colors">
+              Контакти
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Services Header */}
+      <section className="bg-bone-light py-8">
+        <div className="container mx-auto px-4">
+          <h1 className="mb-4 text-4xl font-bold text-balance">Услуги</h1>
+        </div>
+      </section>
+
+      {/* Services Grid */}
+      <section className="bg-bone-base py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
+            {content.services.items.map((service) => (
+              <div
+                key={service.id}
+                className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-lg min-w-0"
+              >
+                <h3 className="mb-3 text-lg font-semibold break-words">{service.title}</h3>
+                <p className="text-base text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <p className="text-sm text-muted-foreground">{content.footer.copyright}</p>
+            <p className="text-sm text-muted-foreground">{content.footer.tagline}</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
