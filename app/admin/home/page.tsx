@@ -335,7 +335,7 @@ export default function AdminHome() {
           <div className="flex items-center gap-3 cursor-default">
             <Image
               src="/images/logo.png"
-              alt="Роси Ро ЕООД Лого"
+              alt="Роси Ро ЕООД Лого (Rosy Ro Ltd. Logo)"
               width={120}
               height={40}
               className="h-10 w-auto"

@@ -32,7 +32,7 @@ export default function Services() {
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/images/logo.png"
-              alt="Роси Ро ЕООД Лого"
+              alt="Роси Ро ЕООД Лого (Rosy Ro Ltd. Logo)"
               width={120}
               height={40}
               className="h-10 w-auto"
