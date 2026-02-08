@@ -1,8 +1,9 @@
-import type React from "react"
+import { getHomeContent } from "@/lib/data/home"
+import { toJsonLd } from "@/lib/jsonld"
+import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import { toJsonLd } from "@/lib/jsonld"
+import type React from "react"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -16,6 +17,8 @@ const siteName = "Роси Ро ЕООД"
 const defaultTitle = "Rosy Ro (Роси Ро) ЕООД - Консултант строителен надзор"
 const defaultDescription =
   "Rosy Ro / Роси Ро ЕООД - строителен надзор, проектиране, промяна на предназначението и консултации в Хасково. Професионални услуги за строителен надзор, одити и разрешителни за строителни обекти."
+
+const defaultFacebookUrl = "https://www.facebook.com/profile.php?id=61586010500517&locale=bg_BG"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -77,11 +80,24 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  let contact = { address: "", phone: "", email: "", facebook: defaultFacebookUrl }
+  try {
+    const content = await getHomeContent()
+    contact = {
+      address: content.contact.address,
+      phone: content.contact.phone,
+      email: content.contact.email,
+      facebook: content.contact.facebook || defaultFacebookUrl,
+    }
+  } catch {
+    // Fallback if data fetch fails; base JSON-LD without contact details
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -90,6 +106,19 @@ export default function RootLayout({
     alternateName: ["Rosy Ro", "Rosy Ro Ltd.", "Роси Ро", "Роси Ро ЕООД", "Rosy", "Роси", "РосиРо", "росиро", "RosyRO", "rosyrO"],
     description: defaultDescription,
     url: siteUrl,
+    logo: `${siteUrl}/images/logo.png`,
+    image: `${siteUrl}/og.png`,
+    ...(contact.address && {
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: contact.address,
+        addressLocality: "Хасково",
+        addressCountry: "BG",
+      },
+    }),
+    ...(contact.phone && { telephone: contact.phone.replace(/\s/g, "") }),
+    ...(contact.email && { email: contact.email }),
+    sameAs: [contact.facebook],
     areaServed: {
       "@type": "City",
       name: "Хасково",
