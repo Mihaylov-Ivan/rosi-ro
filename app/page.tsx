@@ -93,6 +93,11 @@ export default function Home() {
         </div>
       </header>
 
+      {/* SEO: keywords for findability (screen-reader only) */}
+      <div className="sr-only" aria-hidden="true">
+        Строителен надзор Хасково. Проектиране, промяна на предназначението, консултации по строителство в Хасково. Консултации строителен надзор и проектиране. Промяна на предназначението Хасково. Роси Ро ЕООД — консултант строителен надзор, одити и консултации.
+      </div>
+
       {/* Hero Section */}
       <section className="bg-bone-light py-12">
         <div className="container mx-auto px-4">

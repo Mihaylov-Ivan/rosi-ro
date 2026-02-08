@@ -52,6 +52,11 @@ export default function Services() {
         </div>
       </header>
 
+      {/* SEO: keywords for findability (screen-reader only) */}
+      <div className="sr-only" aria-hidden="true">
+        Услуги: строителен надзор Хасково, проектиране, промяна на предназначението, консултации в Хасково. Консултации строителен надзор, проектиране строителство, промяна на предназначението Хасково. Роси Ро ЕООД.
+      </div>
+
       {/* Services Header */}
       <section className="bg-bone-light py-8">
         <div className="container mx-auto px-4">
