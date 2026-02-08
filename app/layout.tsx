@@ -14,7 +14,7 @@ const siteUrl =
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://rosi-ro.vercel.app")
 
 const siteName = "Роси Ро ЕООД"
-const defaultTitle = "Rosy Ro (Роси Ро) ЕООД - Консултант строителен надзор"
+const defaultTitle = "Rosy Ro (Роси Ро) ЕООД - Консултант строителен надзор Хасково"
 const defaultDescription =
   "Rosy Ro / Роси Ро ЕООД - строителен надзор, проектиране, промяна на предназначението и консултации в Хасково. Професионални услуги за строителен надзор, одити и разрешителни за строителни обекти."
 
