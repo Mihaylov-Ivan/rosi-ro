@@ -122,6 +122,29 @@ export async function getPortfolioProjects(): Promise<PortfolioProject[]> {
   return sortedData.map(transformRow);
 }
 
+export async function getPortfolioProject(id: number): Promise<PortfolioProject | null> {
+  const supabase = createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("portfolio")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) {
+    if (error?.code === "PGRST116") {
+      return null; // No rows returned
+    }
+    if (error) {
+      console.error("Error fetching portfolio project:", error);
+      throw error;
+    }
+    return null;
+  }
+
+  return transformRow(data as PortfolioRow);
+}
+
 export async function createPortfolioProject(
   project: Omit<PortfolioProject, "id">
 ): Promise<PortfolioProject> {

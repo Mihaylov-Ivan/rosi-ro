@@ -25,7 +25,6 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ content, projects, categories }: HomeClientProps) {
-  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const categoryImages = useMemo(
@@ -206,11 +205,9 @@ export default function HomeClient({ content, projects, categories }: HomeClient
                   return (
                     <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                       {categoryProjects.map((project) => (
-                        <button
+                        <Link
                           key={project.id}
-                          onClick={() => {
-                            setSelectedProject(project)
-                          }}
+                          href={`/projects/${project.id}`}
                           className="group overflow-hidden rounded-lg border border-border bg-card transition-all hover:shadow-xl hover:scale-[1.02] text-left flex flex-col h-full"
                         >
                           <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted flex-shrink-0 flex items-center justify-center min-h-[280px]">
@@ -234,66 +231,11 @@ export default function HomeClient({ content, projects, categories }: HomeClient
                             </h3>
                             <p className="text-base text-muted-foreground line-clamp-3 flex-1 leading-relaxed">{project.description}</p>
                           </div>
-                        </button>
+                        </Link>
                       ))}
                     </div>
                   )
                 })()}
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Project Detail Modal */}
-      <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto !z-[60]">
-          {selectedProject && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold">{selectedProject.title}</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-6">
-                {selectedProject.image && (
-                  <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
-                    <Image
-                      src={selectedProject.image}
-                      alt={selectedProject.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-
-                <div>
-                  <div className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                    {selectedProject.category}
-                  </div>
-                  <p className="text-muted-foreground leading-relaxed">{selectedProject.description}</p>
-                </div>
-
-                {(selectedProject.details.location?.trim() || selectedProject.details.year?.trim() || selectedProject.details.scope?.trim()) && (
-                  <div className="grid gap-4 border-t border-border pt-6 md:grid-cols-3">
-                    {selectedProject.details.location?.trim() && (
-                      <div>
-                        <h4 className="mb-1 font-semibold">Локация</h4>
-                        <p className="text-muted-foreground">{selectedProject.details.location}</p>
-                      </div>
-                    )}
-                    {selectedProject.details.year?.trim() && (
-                      <div>
-                        <h4 className="mb-1 font-semibold">Година</h4>
-                        <p className="text-muted-foreground">{selectedProject.details.year}</p>
-                      </div>
-                    )}
-                    {selectedProject.details.scope?.trim() && (
-                      <div>
-                        <h4 className="mb-1 font-semibold">Обхват</h4>
-                        <p className="text-muted-foreground">{selectedProject.details.scope}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             </>
           )}
